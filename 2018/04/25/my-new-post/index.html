@@ -102,14 +102,21 @@
 
 
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="柱状图和折线图的组合图是excel里很容易实现的一个功能，日常报表里也经常使用这类型的图。最近想用Rmarkdown自动生成日报并直接发邮件，但却被这个简单的图难住了。 先造一些数据，没有实际意义。柱状图要显示绝对值，折线图要显示百分比。formattable包可以把小数显示成百分比而保留其numeric的类型。12345library(formattable)# test data 数据均为捏造">
+<meta property="og:type" content="article">
 <meta property="og:title" content="my new post">
 <meta property="og:url" content="http://yoursite.com/2018/04/25/my-new-post/index.html">
 <meta property="og:site_name" content="夏小雨">
+<meta property="og:description" content="柱状图和折线图的组合图是excel里很容易实现的一个功能，日常报表里也经常使用这类型的图。最近想用Rmarkdown自动生成日报并直接发邮件，但却被这个简单的图难住了。 先造一些数据，没有实际意义。柱状图要显示绝对值，折线图要显示百分比。formattable包可以把小数显示成百分比而保留其numeric的类型。12345library(formattable)# test data 数据均为捏造">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-04-25T04:44:02.912Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4006139-d492320ebc853a5f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4006139-acf36ea5bddba9cf.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4006139-ec2680784bc20156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-26T03:35:27.640Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="my new post">
+<meta name="twitter:description" content="柱状图和折线图的组合图是excel里很容易实现的一个功能，日常报表里也经常使用这类型的图。最近想用Rmarkdown自动生成日报并直接发邮件，但却被这个简单的图难住了。 先造一些数据，没有实际意义。柱状图要显示绝对值，折线图要显示百分比。formattable包可以把小数显示成百分比而保留其numeric的类型。12345library(formattable)# test data 数据均为捏造">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4006139-d492320ebc853a5f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -320,6 +327,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-04-26 11:35:27" itemprop="dateModified" datetime="2018-04-26T11:35:27+08:00">2018-04-26</time>
+              
+            
           </span>
 
           
@@ -350,7 +373,25 @@
       
 
       
-        
+        <p>柱状图和折线图的组合图是excel里很容易实现的一个功能，日常报表里也经常使用这类型的图。最近想用Rmarkdown自动生成日报并直接发邮件，但却被这个简单的图难住了。</p>
+<p>先造一些数据，没有实际意义。柱状图要显示绝对值，折线图要显示百分比。formattable包可以把小数显示成百分比而保留其numeric的类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">library(formattable)</span><br><span class="line"># test data 数据均为捏造</span><br><span class="line">y&lt;-data.frame(date=c(&apos;1月&apos;,&apos;2月&apos;,&apos;3月&apos;,&apos;4月&apos;,&apos;5月&apos;,&apos;6月&apos;,&apos;7月&apos;),</span><br><span class="line">              waterfall = c(2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6),</span><br><span class="line">              humidity=percent(c(0.5012, 0.25, 0.1818, 0.3333, 0.5385, 0.9091, 0.7273)))</span><br></pre></td></tr></table></figure></p>
+<p>在excel中的效果如下图，有点丑，别介意，大致就是这么个意思：<br><img src="http://upload-images.jianshu.io/upload_images/4006139-d492320ebc853a5f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>#####尝试1: ggplot2</p>
+<p>R里画图第一个想到的是用ggplot2，觉的就是一个柱状图的layer加上一个折线图就好了。但是想起来容易，操作起来却挺困难。第一个是双坐标轴的问题。这个问题无解，因为据说ggplot2的作者不喜欢双坐标轴，觉得会误导读者。那折线图就不要次坐标了吧，也不是不可以。然后把小数据映射到大数据的量级，如100%对应max(降水量)，避免百分比的量级太小而在图片上看不清。然后是添加图例。柱状图和折线图可以单独添加图例，但是两个会添加在同一个位置并且彼此重叠。因为legend的position是通过theme来调节的，不能分别作用于柱状图和折线图。目前我还没找到解决方法，希望高人指点。我能做到的就是下图这样了：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4006139-acf36ea5bddba9cf.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ggplot(y)+</span><br><span class="line">  geom_bar(aes(x=y[1:7,1], y=y[1:7,2]), stat=&quot;identity&quot;, width=.5, fill=&apos;#227487&apos;)+</span><br><span class="line">  ylim(c(0,200))+</span><br><span class="line">  geom_text(aes(x=y[1:7,1], y=y[1:7,2], label=y[1:7,2]), vjust=-0.5)+</span><br><span class="line">  geom_line(aes(x =y[1:7,1], y=y[1:7,3]*max(y[1:7,2]),linetype = &apos;湿度&apos; , group=1), size=1.2, color=&apos;#ca3e1c&apos;)+</span><br><span class="line">  # scale_colour_manual(values = c(&quot;湿度&quot;=&quot;red&quot;)) +</span><br><span class="line">  geom_point(aes(x =y[1:7,1], y=y[1:7,3]*max(y[1:7,2])), size=4, shape=21, fill=&apos;white&apos;, color=&apos;#ca3e1c&apos;)+</span><br><span class="line">  geom_text(aes(x=y[1:7,1], y=y[1:7,3]*max(y[1:7,2]), </span><br><span class="line">                label=paste(y[1:7,3]*100, &apos;%&apos;, sep=&apos;&apos;)), vjust=-1)+</span><br><span class="line">  xlab(&apos;&apos;)+ylab(&apos;降雨量&apos;)+</span><br><span class="line">  theme(axis.text=element_text(size=12), axis.title=element_text(size=12),</span><br><span class="line">        legend.title=element_blank(), </span><br><span class="line">        panel.background = element_rect(fill = &apos;white&apos;, colour = &apos;white&apos;),</span><br><span class="line">        legend.position=&quot;top&quot;)+</span><br><span class="line">  ggtitle(&apos;测试数据&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>双坐标轴还可以用R自带的plot来做，也有一个双坐标轴的包，但图都有点丑，所以没有再研究了。有兴趣可以看stackoverflow上的这篇 <a href="http://stackoverflow.com/questions/6142944/how-can-i-plot-with-2-different-y-axes" target="_blank" rel="noopener"><a href="http://stackoverflow.com/questions/6142944/how-can-i-plot-with-2-different-y-axes" target="_blank" rel="noopener">How can I plot with 2 different y-axes?</a></a></p>
+<h5 id="尝试2-recharts"><a href="#尝试2-recharts" class="headerlink" title="尝试2: recharts"></a>尝试2: recharts</h5><p>recharts是R调用百度<a href="http://echarts.baidu.com/" target="_blank" rel="noopener">echarts</a>的一个包，目前其实有两个包叫recharts，一个是<a href="https://github.com/yihui/recharts" target="_blank" rel="noopener">yihui</a>做的，另一个是<a href="https://github.com/taiyun/recharts" target="_blank" rel="noopener">taiyun</a>的。taiyun的包里把echarts的各个图形分类别做了接口，代码简单，但是可定制的地方较少，比较适合不需要复杂图形的情况。yihui的包基本就是把js语言先用R的格式写，然后再翻译成js语言（我猜的），所以定制能力几乎和原生echats一样。我这里用的是yihui的包，注意安装时不要通过cran而是从github安装，因为从cran安装的recharts版本较低。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">devtools::install_github(&quot;yihui/recharts&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>我用的echarts模版是它的<a href="http://echarts.baidu.com/demo.html#mix-line-bar" target="_blank" rel="noopener">折柱混合图</a>。在默认的基础上改了bar和line的颜色，增加并格式化label，修改次坐标轴的label格式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">library(recharts)</span><br><span class="line">barnline&lt;-list(</span><br><span class="line">  title = list(text = &apos;测试数据&apos;),</span><br><span class="line">  tooltip = list(),</span><br><span class="line">  legend = list(data=c(&apos;降水量&apos;,&apos;湿度&apos;)),</span><br><span class="line">  xAxis= list(</span><br><span class="line">    type= &apos;category&apos;,</span><br><span class="line">    data= y$date,</span><br><span class="line">    splitLine = list(show=FALSE) # 删掉竖线</span><br><span class="line">  ),</span><br><span class="line">  yAxis= list(</span><br><span class="line">    list(</span><br><span class="line">      type= &apos;value&apos;,</span><br><span class="line">      name= &apos;降水量&apos;,</span><br><span class="line">      min= 0,</span><br><span class="line">      max= ceiling(max(y$waterfall/10))*10,</span><br><span class="line">      interval= ceiling(max(y$waterfall/10))*10/5,</span><br><span class="line">      splitLine=list(</span><br><span class="line">        show=FALSE # 删掉横线</span><br><span class="line">      ) </span><br><span class="line">      #axisLabel= list (formatter= &apos;&#123;value&#125; ml&apos;)</span><br><span class="line">    ),</span><br><span class="line">    list(</span><br><span class="line">      type= &apos;value&apos;,</span><br><span class="line">      name= &apos;湿度&apos;,</span><br><span class="line">      min= 0,</span><br><span class="line">      splitLine=list(</span><br><span class="line">        show=FALSE</span><br><span class="line">      ) ,</span><br><span class="line">      max= 1,</span><br><span class="line">      interval= 0.2 ,</span><br><span class="line">      axisLabel= list(formatter= JS(&quot;function(value)&#123;return value * 100 + &apos;%&apos;;&#125;&quot;))</span><br><span class="line">    )</span><br><span class="line">  ),</span><br><span class="line">  series = list(</span><br><span class="line">    list(</span><br><span class="line">      name=&quot;降水量&quot;,</span><br><span class="line">      type=&apos;bar&apos;,</span><br><span class="line">      data=y$waterfall,</span><br><span class="line">      itemStyle = list(</span><br><span class="line">        normal=list(color = &apos;#227487&apos;, label = list(show = TRUE)) # set bar color and label</span><br><span class="line">      )</span><br><span class="line">    ),</span><br><span class="line">    list(</span><br><span class="line">      name=&apos;湿度&apos;,</span><br><span class="line">      type=&apos;line&apos;,</span><br><span class="line">      yAxisIndex= 1,</span><br><span class="line">      data=y$humid</span><br><span class="line">![excel.jpg](http://upload-images.jianshu.io/upload_images/4006139-cde6c9d7d654bb1c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">ity,</span><br><span class="line">      itemStyle = list(</span><br><span class="line">        normal=list( label = list(show = TRUE, formatter= JS(&quot;function(c)&#123;return Math.floor(c.value  * 10000)/100 + &apos;%&apos;;&#125;&quot;))) # label保留小数点后两位</span><br><span class="line">      )</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line">)</span><br><span class="line">echart(barnline, width = 700, height =400)</span><br></pre></td></tr></table></figure></p>
+<p>效果截图，动态效果可参考echarts示例：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4006139-ec2680784bc20156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>一点体会：</p>
+<ul>
+<li>把echarts源代码中所有的冒号<code>:{}</code>改成等号<code>=</code>, 所有的花括号<code>{}</code>改成<code>list()</code>。</li>
+<li>不知道yihui接的是echarts2还是echarts3，在echarts3里显示数据label是单独的一条label语句，但R里要放到itemStyle中，否则报错。</li>
+<li>总的来说很方便，定制性很高。</li>
+</ul>
+
       
     </div>
 
@@ -434,8 +475,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -480,6 +530,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#尝试2-recharts"><span class="nav-number">1.</span> <span class="nav-text">尝试2: recharts</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
