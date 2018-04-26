@@ -111,7 +111,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4006139-78d06957038df412.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4006139-94b853e07d25fb3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-04-26T14:12:40.826Z">
+<meta property="og:updated_time" content="2018-04-26T14:21:38.710Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="R自动化生成报表里踩过的坑">
 <meta name="twitter:description" content="UTF-8和utf8是两种不同的encoding。">
@@ -322,7 +322,7 @@
                 
               
 
-              <time title="Created: 2018-04-26 12:59:53 / Modified: 22:12:40" itemprop="dateCreated datePublished" datetime="2018-04-26T12:59:53+08:00">2018-04-26</time>
+              <time title="Created: 2018-04-26 12:59:53 / Modified: 22:21:38" itemprop="dateCreated datePublished" datetime="2018-04-26T12:59:53+08:00">2018-04-26</time>
             
 
             
@@ -346,6 +346,8 @@
           
 
           
+              <div class="post-description">UTF-8和utf8是两种不同的encoding。</div>
+          
 
         </div>
       </header>
@@ -360,9 +362,7 @@
       
 
       
-        <p>UTF-8和utf8是两种不同的encoding。</p>
-<a id="more"></a>
-<p>R自动化生成报表的思路是这样的，先用R连Oracle，从Oracle数据库里把前一天相关的所有数据都取出来，不做任何汇总操作。然后在R里处理数据，主要用data.table和dplyr两个包，做一些筛选和汇总。数据处理完了以后，在一个rmarkdown文件里用recharts包画图（如何使用recharts可以参考我<a href="https://dingdingxia.github.io/2018/04/25/recharts/" target="_blank" rel="noopener">前一篇博客</a>)，用DT包做表格，生成最后的报表。这样每天手动运行了一段时间后，用taskscheduleR包设置任务计划，每天定时自动运行。</p>
+        <p>R自动化生成报表的思路是这样的，先用R连Oracle，从Oracle数据库里把前一天相关的所有数据都取出来，不做任何汇总操作。然后在R里处理数据，主要用data.table和dplyr两个包，做一些筛选和汇总。数据处理完了以后，在一个rmarkdown文件里用recharts包画图（如何使用recharts可以参考我<a href="https://dingdingxia.github.io/2018/04/25/recharts/" target="_blank" rel="noopener">前一篇博客</a>)，用DT包做表格，生成最后的报表。这样每天手动运行了一段时间后，用taskscheduleR包设置任务计划，每天定时自动运行。</p>
 <p>虽然从Oracle里读取所有数据的时间较长，每天大约有70w行数据，但之后在R里进行数据处理和查询就比较方便快速。当然也可以在Oracle里写sql做汇总，然后用R读汇总数据，但因为我现在读的这个表索引做的不够好，在Oracle里做汇总本身也要花相当长的时间，比data.table要慢上许多。总之这个做法只是根据我的个人偏好和数据情况决定的。</p>
 <p>好了，下面就一步步来说吧。</p>
 <h5 id="R连Oracle。"><a href="#R连Oracle。" class="headerlink" title="R连Oracle。"></a>R连Oracle。</h5><p>用的包是RODBC，64位windows，64位R 3.3.2，Rstudio 1.0.136，需要设置数据源（ODBC）。可以在网上搜一下，挺多教程的。如在这里配置了tuominku这个数据源。</p>
