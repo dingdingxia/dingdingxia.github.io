@@ -274,150 +274,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/bi-with-R/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/26/bi-with-R/" itemprop="url">
-                  R自动化生成报表里踩过的坑
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-04-26 12:59:53 / Modified: 22:12:40" itemprop="dateCreated datePublished" datetime="2018-04-26T12:59:53+08:00">2018-04-26</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>UTF-8和utf8是两种不同的encoding。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/26/bi-with-R/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/25/recharts/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -516,16 +372,26 @@
       
         
           
-          柱状图和折线图的组合图是excel里很容易实现的一个功能，日常报表里也经常使用这类型的图。最近想用Rmarkdown自动生成日报并直接发邮件，但却被这个简单的图难住了。
-先造一些数据，没有实际意义。柱状图要显示绝对值，折线图要显示百分比。formattable包可以把小数显示成百分比而保留其nume
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/25/recharts/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+            <p>柱状图和折线图的组合图是excel里很容易实现的一个功能，日常报表里也经常使用这类型的图。最近想用Rmarkdown自动生成日报并直接发邮件，但却被这个简单的图难住了。</p>
+<p>先造一些数据，没有实际意义。柱状图要显示绝对值，折线图要显示百分比。formattable包可以把小数显示成百分比而保留其numeric的类型。<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(formattable)</span><br><span class="line"><span class="comment"># test data 数据均为捏造</span></span><br><span class="line">y&lt;-data.frame(date=c(<span class="string">'1月'</span>,<span class="string">'2月'</span>,<span class="string">'3月'</span>,<span class="string">'4月'</span>,<span class="string">'5月'</span>,<span class="string">'6月'</span>,<span class="string">'7月'</span>),</span><br><span class="line">              waterfall = c(<span class="number">2.6</span>, <span class="number">5.9</span>, <span class="number">9.0</span>, <span class="number">26.4</span>, <span class="number">28.7</span>, <span class="number">70.7</span>, <span class="number">175.6</span>),</span><br><span class="line">              humidity=percent(c(<span class="number">0.5012</span>, <span class="number">0.25</span>, <span class="number">0.1818</span>, <span class="number">0.3333</span>, <span class="number">0.5385</span>, <span class="number">0.9091</span>, <span class="number">0.7273</span>)))</span><br></pre></td></tr></table></figure></p>
+<p>在excel中的效果如下图，有点丑，别介意，大致就是这么个意思：<br><img src="http://upload-images.jianshu.io/upload_images/4006139-d492320ebc853a5f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h5 id="尝试1-ggplot2"><a href="#尝试1-ggplot2" class="headerlink" title="尝试1: ggplot2"></a>尝试1: ggplot2</h5><p>R里画图第一个想到的是用ggplot2，觉的就是一个柱状图的layer加上一个折线图就好了。但是想起来容易，操作起来却挺困难。第一个是双坐标轴的问题。这个问题无解，因为据说ggplot2的作者不喜欢双坐标轴，觉得会误导读者。那折线图就不要次坐标了吧，也不是不可以。然后把小数据映射到大数据的量级，如100%对应max(降水量)，避免百分比的量级太小而在图片上看不清。然后是添加图例。柱状图和折线图可以单独添加图例，但是两个会添加在同一个位置并且彼此重叠。因为legend的position是通过theme来调节的，不能分别作用于柱状图和折线图。目前我还没找到解决方法，希望高人指点。我能做到的就是下图这样了：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4006139-acf36ea5bddba9cf.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>代码</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ggplot(y)+</span><br><span class="line">  geom_bar(aes(x=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">1</span>], y=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">2</span>]), stat=<span class="string">"identity"</span>, width=<span class="number">.5</span>, fill=<span class="string">'#227487'</span>)+</span><br><span class="line">  ylim(c(<span class="number">0</span>,<span class="number">200</span>))+</span><br><span class="line">  geom_text(aes(x=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">1</span>], y=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">2</span>], label=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">2</span>]), vjust=-<span class="number">0.5</span>)+</span><br><span class="line">  geom_line(aes(x =y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">1</span>], y=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">3</span>]*max(y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">2</span>]),linetype = <span class="string">'湿度'</span> , group=<span class="number">1</span>), size=<span class="number">1.2</span>, color=<span class="string">'#ca3e1c'</span>)+</span><br><span class="line">  <span class="comment"># scale_colour_manual(values = c("湿度"="red")) +</span></span><br><span class="line">  geom_point(aes(x =y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">1</span>], y=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">3</span>]*max(y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">2</span>])), size=<span class="number">4</span>, shape=<span class="number">21</span>, fill=<span class="string">'white'</span>, color=<span class="string">'#ca3e1c'</span>)+</span><br><span class="line">  geom_text(aes(x=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">1</span>], y=y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">3</span>]*max(y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">2</span>]), </span><br><span class="line">                label=paste(y[<span class="number">1</span>:<span class="number">7</span>,<span class="number">3</span>]*<span class="number">100</span>, <span class="string">'%'</span>, sep=<span class="string">''</span>)), vjust=-<span class="number">1</span>)+</span><br><span class="line">  xlab(<span class="string">''</span>)+ylab(<span class="string">'降雨量'</span>)+</span><br><span class="line">  theme(axis.text=element_text(size=<span class="number">12</span>), axis.title=element_text(size=<span class="number">12</span>),</span><br><span class="line">        legend.title=element_blank(), </span><br><span class="line">        panel.background = element_rect(fill = <span class="string">'white'</span>, colour = <span class="string">'white'</span>),</span><br><span class="line">        legend.position=<span class="string">"top"</span>)+</span><br><span class="line">  ggtitle(<span class="string">'测试数据'</span>)</span><br></pre></td></tr></table></figure>
+<p>双坐标轴还可以用R自带的plot来做，也有一个双坐标轴的包，但图都有点丑，所以没有再研究了。有兴趣可以看stackoverflow上的这篇 <a href="http://stackoverflow.com/questions/6142944/how-can-i-plot-with-2-different-y-axes" target="_blank" rel="noopener"><a href="http://stackoverflow.com/questions/6142944/how-can-i-plot-with-2-different-y-axes" target="_blank" rel="noopener">How can I plot with 2 different y-axes?</a></a></p>
+<h5 id="尝试2-recharts"><a href="#尝试2-recharts" class="headerlink" title="尝试2: recharts"></a>尝试2: recharts</h5><p>recharts是R调用百度<a href="http://echarts.baidu.com/" target="_blank" rel="noopener">echarts</a>的一个包，目前其实有两个包叫recharts，一个是<a href="https://github.com/yihui/recharts" target="_blank" rel="noopener">yihui</a>做的，另一个是<a href="https://github.com/taiyun/recharts" target="_blank" rel="noopener">taiyun</a>的。taiyun的包里把echarts的各个图形分类别做了接口，代码简单，但是可定制的地方较少，比较适合不需要复杂图形的情况。yihui的包基本就是把js语言先用R的格式写，然后再翻译成js语言（我猜的），所以定制能力几乎和原生echats一样。我这里用的是yihui的包，注意安装时不要通过cran而是从github安装，因为从cran安装的recharts版本较低。<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">devtools::install_github(<span class="string">"yihui/recharts"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>我用的echarts模版是它的<a href="http://echarts.baidu.com/demo.html#mix-line-bar" target="_blank" rel="noopener">折柱混合图</a>。在默认的基础上改了bar和line的颜色，增加并格式化label，修改次坐标轴的label格式。<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(recharts)</span><br><span class="line">barnline&lt;-list(</span><br><span class="line">  title = list(text = <span class="string">'测试数据'</span>),</span><br><span class="line">  tooltip = list(),</span><br><span class="line">  legend = list(data=c(<span class="string">'降水量'</span>,<span class="string">'湿度'</span>)),</span><br><span class="line">  xAxis= list(</span><br><span class="line">    type= <span class="string">'category'</span>,</span><br><span class="line">    data= y$date,</span><br><span class="line">    splitLine = list(show=<span class="literal">FALSE</span>) <span class="comment"># 删掉竖线</span></span><br><span class="line">  ),</span><br><span class="line">  yAxis= list(</span><br><span class="line">    list(</span><br><span class="line">      type= <span class="string">'value'</span>,</span><br><span class="line">      name= <span class="string">'降水量'</span>,</span><br><span class="line">      min= <span class="number">0</span>,</span><br><span class="line">      max= ceiling(max(y$waterfall/<span class="number">10</span>))*<span class="number">10</span>,</span><br><span class="line">      interval= ceiling(max(y$waterfall/<span class="number">10</span>))*<span class="number">10</span>/<span class="number">5</span>,</span><br><span class="line">      splitLine=list(</span><br><span class="line">        show=<span class="literal">FALSE</span> <span class="comment"># 删掉横线</span></span><br><span class="line">      ) </span><br><span class="line">      <span class="comment">#axisLabel= list (formatter= '&#123;value&#125; ml')</span></span><br><span class="line">    ),</span><br><span class="line">    list(</span><br><span class="line">      type= <span class="string">'value'</span>,</span><br><span class="line">      name= <span class="string">'湿度'</span>,</span><br><span class="line">      min= <span class="number">0</span>,</span><br><span class="line">      splitLine=list(</span><br><span class="line">        show=<span class="literal">FALSE</span></span><br><span class="line">      ) ,</span><br><span class="line">      max= <span class="number">1</span>,</span><br><span class="line">      interval= <span class="number">0.2</span> ,</span><br><span class="line">      axisLabel= list(formatter= JS(<span class="string">"function(value)&#123;return value * 100 + '%';&#125;"</span>))</span><br><span class="line">    )</span><br><span class="line">  ),</span><br><span class="line">  series = list(</span><br><span class="line">    list(</span><br><span class="line">      name=<span class="string">"降水量"</span>,</span><br><span class="line">      type=<span class="string">'bar'</span>,</span><br><span class="line">      data=y$waterfall,</span><br><span class="line">      itemStyle = list(</span><br><span class="line">        normal=list(color = <span class="string">'#227487'</span>, label = list(show = <span class="literal">TRUE</span>)) <span class="comment"># set bar color and label</span></span><br><span class="line">      )</span><br><span class="line">    ),</span><br><span class="line">    list(</span><br><span class="line">      name=<span class="string">'湿度'</span>,</span><br><span class="line">      type=<span class="string">'line'</span>,</span><br><span class="line">      yAxisIndex= <span class="number">1</span>,</span><br><span class="line">      data=y$humid</span><br><span class="line">![excel.jpg](http://upload-images.jianshu.io/upload_images/<span class="number">4006139</span>-cde6c9d7d654bb1c.jpg?imageMogr2/auto-orient/strip%7CimageView2/<span class="number">2</span>/w/<span class="number">1240</span>)</span><br><span class="line">ity,</span><br><span class="line">      itemStyle = list(</span><br><span class="line">        normal=list( label = list(show = <span class="literal">TRUE</span>, formatter= JS(<span class="string">"function(c)&#123;return Math.floor(c.value  * 10000)/100 + '%';&#125;"</span>))) <span class="comment"># label保留小数点后两位</span></span><br><span class="line">      )</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line">)</span><br><span class="line">echart(barnline, width = <span class="number">700</span>, height =<span class="number">400</span>)</span><br></pre></td></tr></table></figure></p>
+<p>效果截图，动态效果可参考echarts示例：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4006139-ec2680784bc20156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>一点体会：</p>
+<ul>
+<li>把echarts源代码中所有的冒号<code>:{}</code>改成等号<code>=</code>, 所有的花括号<code>{}</code>改成<code>list()</code>。</li>
+<li>不知道yihui接的是echarts2还是echarts3，在echarts3里显示数据label是单独的一条label语句，但R里要放到itemStyle中，否则报错。</li>
+<li>总的来说很方便，定制性很高。</li>
+</ul>
+
+          
         
       
     </div>
@@ -659,15 +525,17 @@
       
         
           
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/23/hello-world/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+          
         
       
     </div>
@@ -747,7 +615,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
