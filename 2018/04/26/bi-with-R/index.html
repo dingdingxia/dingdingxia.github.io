@@ -111,7 +111,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4006139-78d06957038df412.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4006139-94b853e07d25fb3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-04-27T01:19:13.711Z">
+<meta property="og:updated_time" content="2018-04-30T01:26:33.005Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="R自动化生成报表里踩过的坑">
 <meta name="twitter:description" content="UTF-8和utf8是两种不同的encoding。">
@@ -339,7 +339,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-27 09:19:13" itemprop="dateModified" datetime="2018-04-27T09:19:13+08:00">2018-04-27</time>
+                <time title="Modified: 2018-04-30 09:26:33" itemprop="dateModified" datetime="2018-04-30T09:26:33+08:00">2018-04-30</time>
               
             
           </span>
@@ -387,7 +387,7 @@
 <p><img src="http://upload-images.jianshu.io/upload_images/4006139-94b853e07d25fb3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="把R的encoding设置成utf8"></p>
 <p>另外提一句，上一段代码中的<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">believeNRows=<span class="literal">FALSE</span></span><br></pre></td></tr></table></figure></p>
 <p>虽然我没太搞清楚是什么意思，但它着实避免了一些报错，也没看到加上以后的坏处，所以就一直放着了。</p>
-<h4 id="RODBC的一些tips"><a href="#RODBC的一些tips" class="headerlink" title="RODBC的一些tips"></a>RODBC的一些tips</h4><h6 id="在sql语句中使用R中的对象和函数：paste函数。"><a href="#在sql语句中使用R中的对象和函数：paste函数。" class="headerlink" title="在sql语句中使用R中的对象和函数：paste函数。"></a>在sql语句中使用R中的对象和函数：paste函数。</h6><p>最典型的应用是配合时间函数。如我做的日报，每天早上读取前一天的数据，手动去改时间就太麻烦了，也做不到完全自动化。本质上来说，sqlQuery函数中查询的就是引号里的一段文本，就可以用paste函数来生成，配合R里的Sys.Date函数。具体语法见下。还有一种方法是在sql里直接把时间变成系统时间的函数。<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data&lt;-RODBC::sqlQuery(myconn, </span><br><span class="line">paste(<span class="string">"select * from table </span></span><br><span class="line"><span class="string">        where create_time between between to_date('"</span>, format(Sys.Date()-<span class="number">1</span>,<span class="string">'%Y%m%d'</span>), <span class="string">" 00:00:00', 'yyyymmdd hh24:mi:ss') </span></span><br><span class="line"><span class="string">        and to_date('"</span>, format(Sys.Date()-<span class="number">1</span>,<span class="string">'%Y%m%d'</span>),<span class="string">" 23:59:59', 'yyyymmdd hh24:mi:ss')"</span>, </span><br><span class="line">        sep=<span class="string">""</span>)</span><br></pre></td></tr></table></figure></p>
+<h5 id="RODBC的一些tips"><a href="#RODBC的一些tips" class="headerlink" title="RODBC的一些tips"></a>RODBC的一些tips</h5><h6 id="在sql语句中使用R中的对象和函数：paste函数。"><a href="#在sql语句中使用R中的对象和函数：paste函数。" class="headerlink" title="在sql语句中使用R中的对象和函数：paste函数。"></a>在sql语句中使用R中的对象和函数：paste函数。</h6><p>最典型的应用是配合时间函数。如我做的日报，每天早上读取前一天的数据，手动去改时间就太麻烦了，也做不到完全自动化。本质上来说，sqlQuery函数中查询的就是引号里的一段文本，就可以用paste函数来生成，配合R里的Sys.Date函数。具体语法见下。还有一种方法是在sql里直接把时间变成系统时间的函数。<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data&lt;-RODBC::sqlQuery(myconn, </span><br><span class="line">paste(<span class="string">"select * from table </span></span><br><span class="line"><span class="string">        where create_time between between to_date('"</span>, format(Sys.Date()-<span class="number">1</span>,<span class="string">'%Y%m%d'</span>), <span class="string">" 00:00:00', 'yyyymmdd hh24:mi:ss') </span></span><br><span class="line"><span class="string">        and to_date('"</span>, format(Sys.Date()-<span class="number">1</span>,<span class="string">'%Y%m%d'</span>),<span class="string">" 23:59:59', 'yyyymmdd hh24:mi:ss')"</span>, </span><br><span class="line">        sep=<span class="string">""</span>)</span><br></pre></td></tr></table></figure></p>
 <h6 id="数字以文本格式保存"><a href="#数字以文本格式保存" class="headerlink" title="数字以文本格式保存"></a>数字以文本格式保存</h6><p>像会员号之类的一串数字，默认是以num格式读入的，如果很长的话就显示为科学计数法了。一个方法是设置科学计数法到很长的位数才使用：<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options(scipen=<span class="number">200</span>)</span><br></pre></td></tr></table></figure></p>
 <p>还有一个方法更为直接一点，在查询的时候就以文本保存，只要在sqlQuery中加入<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">```R</span><br><span class="line">data&lt;-RODBC::sqlQuery(myconn, &quot;select * from table&quot;, as.is=T)</span><br></pre></td></tr></table></figure></p>
 <h6 id="把R中的dataframe保存到Oracle数据库的临时表中：sqlSave"><a href="#把R中的dataframe保存到Oracle数据库的临时表中：sqlSave" class="headerlink" title="把R中的dataframe保存到Oracle数据库的临时表中：sqlSave"></a>把R中的dataframe保存到Oracle数据库的临时表中：sqlSave</h6><p>有时需要把R中清洗过的数据和Oracle中某些表关联，但这时候就不能像第一条中提到的用paste函数了，可以先将R中的dataframe存到数据库的临时表中，再用sql进行关联查询。<br><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlSave(myconn, Rdataframe, tablename=<span class="string">'TEMP1'</span>, rownames=<span class="literal">FALSE</span>, addPK=<span class="literal">FALSE</span><span class="string">')</span></span><br></pre></td></tr></table></figure></p>
@@ -436,6 +436,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/30/shiny-first-try/" rel="prev" title="Shiny初试：用wordcould2画用户标签">
+                Shiny初试：用wordcould2画用户标签 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -509,7 +513,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -549,7 +553,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#R连Oracle"><span class="nav-number">1.</span> <span class="nav-text">R连Oracle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RODBC的一些tips"><span class="nav-number">2.</span> <span class="nav-text">RODBC的一些tips</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#在sql语句中使用R中的对象和函数：paste函数。"><span class="nav-number">2.0.1.</span> <span class="nav-text">在sql语句中使用R中的对象和函数：paste函数。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数字以文本格式保存"><span class="nav-number">2.0.2.</span> <span class="nav-text">数字以文本格式保存</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#把R中的dataframe保存到Oracle数据库的临时表中：sqlSave"><span class="nav-number">2.0.3.</span> <span class="nav-text">把R中的dataframe保存到Oracle数据库的临时表中：sqlSave</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#通过R查询Oracle并将结果直接保存为临时表：sqlCopy"><span class="nav-number">2.0.4.</span> <span class="nav-text">通过R查询Oracle并将结果直接保存为临时表：sqlCopy</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TaskScheduleR：部署定时任务"><span class="nav-number">3.</span> <span class="nav-text">TaskScheduleR：部署定时任务</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#R连Oracle"><span class="nav-number">1.</span> <span class="nav-text">R连Oracle</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#RODBC的一些tips"><span class="nav-number">1.1.</span> <span class="nav-text">RODBC的一些tips</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#在sql语句中使用R中的对象和函数：paste函数。"><span class="nav-number">1.1.1.</span> <span class="nav-text">在sql语句中使用R中的对象和函数：paste函数。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数字以文本格式保存"><span class="nav-number">1.1.2.</span> <span class="nav-text">数字以文本格式保存</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#把R中的dataframe保存到Oracle数据库的临时表中：sqlSave"><span class="nav-number">1.1.3.</span> <span class="nav-text">把R中的dataframe保存到Oracle数据库的临时表中：sqlSave</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#通过R查询Oracle并将结果直接保存为临时表：sqlCopy"><span class="nav-number">1.1.4.</span> <span class="nav-text">通过R查询Oracle并将结果直接保存为临时表：sqlCopy</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TaskScheduleR：部署定时任务"><span class="nav-number">2.</span> <span class="nav-text">TaskScheduleR：部署定时任务</span></a></li></ol></div>
             
 
           </div>
