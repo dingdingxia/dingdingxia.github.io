@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1. Intro交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="graph_in_fraud_detection">
+<meta property="og:url" content="http://yoursite.com/2018/06/07/graph-in-fraud-detection/index.html">
+<meta property="og:site_name" content="夏小雨">
+<meta property="og:description" content="1. Intro交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-11T03:56:07.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="graph_in_fraud_detection">
+<meta name="twitter:description" content="1. Intro交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/07/graph-in-fraud-detection/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>graph_in_fraud_detection | 夏小雨</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">夏小雨</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/graph-in-fraud-detection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="夏小雨">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夏小雨">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">graph_in_fraud_detection
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-06-07 15:38:36" itemprop="dateCreated datePublished" datetime="2018-06-07T15:38:36+08:00">2018-06-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-11 11:56:07" itemprop="dateModified" datetime="2018-06-11T11:56:07+08:00">2018-06-11</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1-Intro"><a href="#1-Intro" class="headerlink" title="1. Intro"></a>1. Intro</h3><p>交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一家小型支付公司而言，没有那么多的人力去review这些量的false alarm。因此，业务上对反欺诈模型的精度要求很高，同时对覆盖率也有较高的要求。</p>
+<p>当然，我们可以去寻找更多更有区分度的特征，用更加高级的算法，但投入回报比可能较低。所以我们换了一个思路，从模型设计上就建立一个不是会员维度，而是group维度的模型，即预测一个group是否有欺诈风险。每个group由数量不等的会员组成，每个会员只能属于一个group。如果一个group的欺诈风险很高，那么group里的每个人都应当被审查，反之，如果一个group的欺诈风险很低，那么这个group里的所有人都可以放过。</p>
+<p>这样的设计有几个好处。</p>
+<p>第一，正负样本的比例可以提升100倍左右。这是因为，如果一个group的会员都是历史老用户（通常注册30天以上且过去半年有正常交易），我们直接认为这一个group是好的，并且剔除出训练集。因为一个group中的会员有着相当程度的关联性，可以互相为对方背书。由于正负样本的平衡被大大提升，造成false alarm的几率也大大降低了。</p>
+<p>第二，group维度的变量有更高的区分度。我们以是否有历史交易这个变量为例，通常没有历史交易的用户风险更高，在group维度，我们把这个变量加工成group中没有历史交易的用户的<em>比例</em>。当模型建立在会员维度时，一个有过历史交易的会员<em>可能</em>就被放过了，当建立在group维度时，如果一个欺诈的group里有4个人，其中3个人没有历史交易，那么没有历史交易的用户比例为0.75，这个值是很高的，那么这一组较有可能被识别出来。</p>
+<p>第三，我们可以使用network特有的属性，如degree, betweenness, shortest path之类。对于某些欺诈团伙，仅在network层面做一些简单的规则就可以准确地过滤出来。</p>
+<p>在实战中，团伙欺诈的比例远远高于个案。这里的团伙欺诈指批量伪冒或者批量盗账户之类，毕竟如果我能骗到一个人的钱，肯定能用相同手法骗到许多人。我们发现基于group维度的模型有更高的准确率和更高的覆盖率。当然，如果一个欺诈账号和任何其他账号都关联不上，模型肯定就放过了，但本着抓大放小的原则，团伙欺诈模型应当是反欺诈模型体系中首先建立的一个baseline model。</p>
+<h3 id="2-Group的建立与划分"><a href="#2-Group的建立与划分" class="headerlink" title="2. Group的建立与划分"></a>2. Group的建立与划分</h3><p>在建立group的过程中，我们借鉴社交网络模型。一个社交网络由节点（nodes）和连接节点的边（edges）组成。每个节点代表网络中的一个成员，每条边代表边两端的成员有某种关系。这个模型在信贷反欺诈中似乎已经变成了一种主流，因为我最近收到的好几个简历都提到了类似的项目。但是交易数据和信贷不同，我们并没有现实生活中的社交关系数据，我不知道一个用户的亲属是谁，也没有从运营商那里购买他们的通讯数据（运营商简直无耻，并且有些手机制造商应该有在卖通讯录数据吧）。总之，我们只有用户在我们平台的交易数据和一些绑卡相关的基本信息。</p>
+<p>因此，我们也从交易中去找关系。我们可以定义两个会员之间有某种联结当他们共用同一IP，同一设备，给同一张卡转账（销赃），或他们之间有直接的资金往来等。在我们的模型中，我们共定义了七种联结。其中，IP是一种弱联结，因为两个用户很有可能碰巧使用同一IP，对这个关系需要做一些特殊处理。在我们的一个通用模型里，定义共同使用过两个以上相同IP的用户才可以建立联结。</p>
+<p>生成图我们用的<a href="http://igraph.org/redirect.html" target="_blank" rel="noopener">igraph</a>，在R和Python中都有，igraph可以根据edgelist来创建图，我们所要做的就是创建一个edgelist。一个基本的edgelist有三列，source node，destination node和weight，对一个无向网络我们可以忽略source和destination，随意哪个node放在source都可以。如果没有图数据库的话，也可以用sql从交易数据中自己做一个edgelist。我们以IP为例。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> a.userid <span class="keyword">as</span> src, a.ip, b.userid <span class="keyword">as</span> dst <span class="keyword">from</span> </span><br><span class="line">(<span class="keyword">select</span> <span class="keyword">distinct</span> userid, ip <span class="keyword">from</span> trans_table) a</span><br><span class="line"><span class="keyword">join</span></span><br><span class="line">(<span class="keyword">select</span> <span class="keyword">distinct</span> userid, ip <span class="keyword">from</span> trans_table) b </span><br><span class="line"><span class="keyword">on</span> a.ip  = b.ip <span class="keyword">and</span> a.userid &lt;&gt; b.userid</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/05/multiple_left_join_in_PySpark/" rel="next" title="PySpark">
+                <i class="fa fa-chevron-left"></i> PySpark
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">夏小雨</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Intro"><span class="nav-number">1.</span> <span class="nav-text">1. Intro</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Group的建立与划分"><span class="nav-number">2.</span> <span class="nav-text">2. Group的建立与划分</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">夏小雨</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
