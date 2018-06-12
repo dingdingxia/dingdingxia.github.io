@@ -302,7 +302,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2018/06/07/graph-in-fraud-detection/" itemprop="url">
-                  graph_in_fraud_detection
+                  团伙交易欺诈模型实践
                 </a>
               
             
@@ -345,7 +345,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-06-11 11:56:07" itemprop="dateModified" datetime="2018-06-11T11:56:07+08:00">2018-06-11</time>
+                <time title="Modified: 2018-06-12 16:35:29" itemprop="dateModified" datetime="2018-06-12T16:35:29+08:00">2018-06-12</time>
               
             
           </span>
@@ -379,20 +379,14 @@
 
       
         
-          
-            <h3 id="1-Intro"><a href="#1-Intro" class="headerlink" title="1. Intro"></a>1. Intro</h3><p>交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一家小型支付公司而言，没有那么多的人力去review这些量的false alarm。因此，业务上对反欺诈模型的精度要求很高，同时对覆盖率也有较高的要求。</p>
-<p>当然，我们可以去寻找更多更有区分度的特征，用更加高级的算法，但投入回报比可能较低。所以我们换了一个思路，从模型设计上就建立一个不是会员维度，而是group维度的模型，即预测一个group是否有欺诈风险。每个group由数量不等的会员组成，每个会员只能属于一个group。如果一个group的欺诈风险很高，那么group里的每个人都应当被审查，反之，如果一个group的欺诈风险很低，那么这个group里的所有人都可以放过。</p>
-<p>这样的设计有几个好处。</p>
-<p>第一，正负样本的比例可以提升100倍左右。这是因为，如果一个group的会员都是历史老用户（通常注册30天以上且过去半年有正常交易），我们直接认为这一个group是好的，并且剔除出训练集。因为一个group中的会员有着相当程度的关联性，可以互相为对方背书。由于正负样本的平衡被大大提升，造成false alarm的几率也大大降低了。</p>
-<p>第二，group维度的变量有更高的区分度。我们以是否有历史交易这个变量为例，通常没有历史交易的用户风险更高，在group维度，我们把这个变量加工成group中没有历史交易的用户的<em>比例</em>。当模型建立在会员维度时，一个有过历史交易的会员<em>可能</em>就被放过了，当建立在group维度时，如果一个欺诈的group里有4个人，其中3个人没有历史交易，那么没有历史交易的用户比例为0.75，这个值是很高的，那么这一组较有可能被识别出来。</p>
-<p>第三，我们可以使用network特有的属性，如degree, betweenness, shortest path之类。对于某些欺诈团伙，仅在network层面做一些简单的规则就可以准确地过滤出来。</p>
-<p>在实战中，团伙欺诈的比例远远高于个案。这里的团伙欺诈指批量伪冒或者批量盗账户之类，毕竟如果我能骗到一个人的钱，肯定能用相同手法骗到许多人。我们发现基于group维度的模型有更高的准确率和更高的覆盖率。当然，如果一个欺诈账号和任何其他账号都关联不上，模型肯定就放过了，但本着抓大放小的原则，团伙欺诈模型应当是反欺诈模型体系中首先建立的一个baseline model。</p>
-<h3 id="2-Group的建立与划分"><a href="#2-Group的建立与划分" class="headerlink" title="2. Group的建立与划分"></a>2. Group的建立与划分</h3><p>在建立group的过程中，我们借鉴社交网络模型。一个社交网络由节点（nodes）和连接节点的边（edges）组成。每个节点代表网络中的一个成员，每条边代表边两端的成员有某种关系。这个模型在信贷反欺诈中似乎已经变成了一种主流，因为我最近收到的好几个简历都提到了类似的项目。但是交易数据和信贷不同，我们并没有现实生活中的社交关系数据，我不知道一个用户的亲属是谁，也没有从运营商那里购买他们的通讯数据（运营商简直无耻，并且有些手机制造商应该有在卖通讯录数据吧）。总之，我们只有用户在我们平台的交易数据和一些绑卡相关的基本信息。</p>
-<p>因此，我们也从交易中去找关系。我们可以定义两个会员之间有某种联结当他们共用同一IP，同一设备，给同一张卡转账（销赃），或他们之间有直接的资金往来等。在我们的模型中，我们共定义了七种联结。其中，IP是一种弱联结，因为两个用户很有可能碰巧使用同一IP，对这个关系需要做一些特殊处理。在我们的一个通用模型里，定义共同使用过两个以上相同IP的用户才可以建立联结。</p>
-<p>生成图我们用的<a href="http://igraph.org/redirect.html" target="_blank" rel="noopener">igraph</a>，在R和Python中都有，igraph可以根据edgelist来创建图，我们所要做的就是创建一个edgelist。一个基本的edgelist有三列，source node，destination node和weight，对一个无向网络我们可以忽略source和destination，随意哪个node放在source都可以。如果没有图数据库的话，也可以用sql从交易数据中自己做一个edgelist。我们以IP为例。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> a.userid <span class="keyword">as</span> src, a.ip, b.userid <span class="keyword">as</span> dst <span class="keyword">from</span> </span><br><span class="line">(<span class="keyword">select</span> <span class="keyword">distinct</span> userid, ip <span class="keyword">from</span> trans_table) a</span><br><span class="line"><span class="keyword">join</span></span><br><span class="line">(<span class="keyword">select</span> <span class="keyword">distinct</span> userid, ip <span class="keyword">from</span> trans_table) b </span><br><span class="line"><span class="keyword">on</span> a.ip  = b.ip <span class="keyword">and</span> a.userid &lt;&gt; b.userid</span><br></pre></td></tr></table></figure>
-
-          
+          <h3 id="1-Intro"><a href="#1-Intro" class="headerlink" title="1. Intro"></a>1. Intro</h3><p>交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一家小型支付公司而言，没有那么多的人力去review这些量的false alarm。因此，业务上对反欺诈模型的精度要求很高，同时对覆盖率也有较高的要求。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/06/07/graph-in-fraud-detection/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
