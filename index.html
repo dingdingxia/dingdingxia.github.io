@@ -345,7 +345,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-06-12 23:01:49" itemprop="dateModified" datetime="2018-06-12T23:01:49+08:00">2018-06-12</time>
+                <time title="Modified: 2018-06-13 13:41:20" itemprop="dateModified" datetime="2018-06-13T13:41:20+08:00">2018-06-13</time>
               
             
           </span>
@@ -379,7 +379,7 @@
 
       
         
-          <h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一家小型支付公司而言，没有那么多的人力去review这些量的false alarm。因此，业务上对反欺诈模型的精度要求很高，同时对覆盖率也有较高的要求。</p>
+          <p>交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一家小型支付公司而言，没有那么多的人力去review这些量的false alarm。因此，业务上对反欺诈模型的精度要求很高，同时对覆盖率也有较高的要求。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/06/07/graph-in-fraud-detection/#more" rel="contents">
@@ -458,7 +458,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2018/06/05/multiple_left_join_in_PySpark/" itemprop="url">
-                  PySpark
+                  Multiple Left Join in PySpark
                 </a>
               
             
@@ -487,6 +487,22 @@
               <time title="Created: 2018-06-05 11:01:26" itemprop="dateCreated datePublished" datetime="2018-06-05T11:01:26+08:00">2018-06-05</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-13 12:43:07" itemprop="dateModified" datetime="2018-06-13T12:43:07+08:00">2018-06-13</time>
+              
             
           </span>
 
@@ -520,7 +536,8 @@
       
         
           
-            
+            <p>最近的工作需要把R上的一个监督学习模型在PySpark上重写一遍，这是我第一次接触PySpark。这是一个团伙欺诈交易监测模型，用于预测团伙（group）的欺诈风险，因此模型中的变量都是group的属性。模型的raw data来自交易数据，而交易数据都是会员维度的，要将会员维度的每个变量加工成group维度的变量，涉及到大量（虽不复杂）的变量计算。在特征构造的过程中，每个变量计算好后存在一个dataframe中，每个dataframe的主键都是一样的。在把15个加工好的dataframe做left join的时候，报out of memory</p>
+
           
         
       

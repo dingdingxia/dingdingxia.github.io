@@ -102,14 +102,17 @@
 
 
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="PySpark">
+  <meta name="description" content="最近的工作需要把R上的一个监督学习模型在PySpark上重写一遍，这是我第一次接触PySpark。这是一个团伙欺诈交易监测模型，用于预测团伙（group）的欺诈风险，因此模型中的变量都是group的属性。模型的raw data来自交易数据，而交易数据都是会员维度的，要将会员维度的每个变量加工成group维度的变量，涉及到大量（虽不复杂）的变量计算。在特征构造的过程中，每个变量计算好后存在一个dat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Multiple Left Join in PySpark">
 <meta property="og:url" content="http://yoursite.com/2018/06/05/multiple_left_join_in_PySpark/index.html">
 <meta property="og:site_name" content="夏小雨">
+<meta property="og:description" content="最近的工作需要把R上的一个监督学习模型在PySpark上重写一遍，这是我第一次接触PySpark。这是一个团伙欺诈交易监测模型，用于预测团伙（group）的欺诈风险，因此模型中的变量都是group的属性。模型的raw data来自交易数据，而交易数据都是会员维度的，要将会员维度的每个变量加工成group维度的变量，涉及到大量（虽不复杂）的变量计算。在特征构造的过程中，每个变量计算好后存在一个dat">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-05T03:01:26.578Z">
+<meta property="og:updated_time" content="2018-06-13T04:43:07.152Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PySpark">
+<meta name="twitter:title" content="Multiple Left Join in PySpark">
+<meta name="twitter:description" content="最近的工作需要把R上的一个监督学习模型在PySpark上重写一遍，这是我第一次接触PySpark。这是一个团伙欺诈交易监测模型，用于预测团伙（group）的欺诈风险，因此模型中的变量都是group的属性。模型的raw data来自交易数据，而交易数据都是会员维度的，要将会员维度的每个变量加工成group维度的变量，涉及到大量（虽不复杂）的变量计算。在特征构造的过程中，每个变量计算好后存在一个dat">
 
 
 
@@ -126,7 +129,7 @@
   };
 </script>
 
-  <title>PySpark | 夏小雨</title>
+  <title>Multiple Left Join in PySpark | 夏小雨</title>
   
 
 
@@ -299,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">PySpark
+          <h1 class="post-title" itemprop="name headline">Multiple Left Join in PySpark
               
             
           </h1>
@@ -327,6 +330,22 @@
               <time title="Created: 2018-06-05 11:01:26" itemprop="dateCreated datePublished" datetime="2018-06-05T11:01:26+08:00">2018-06-05</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-13 12:43:07" itemprop="dateModified" datetime="2018-06-13T12:43:07+08:00">2018-06-13</time>
+              
             
           </span>
 
@@ -358,7 +377,8 @@
       
 
       
-        
+        <p>最近的工作需要把R上的一个监督学习模型在PySpark上重写一遍，这是我第一次接触PySpark。这是一个团伙欺诈交易监测模型，用于预测团伙（group）的欺诈风险，因此模型中的变量都是group的属性。模型的raw data来自交易数据，而交易数据都是会员维度的，要将会员维度的每个变量加工成group维度的变量，涉及到大量（虽不复杂）的变量计算。在特征构造的过程中，每个变量计算好后存在一个dataframe中，每个dataframe的主键都是一样的。在把15个加工好的dataframe做left join的时候，报out of memory</p>
+
       
     </div>
 
