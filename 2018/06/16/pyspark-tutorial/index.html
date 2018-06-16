@@ -109,7 +109,7 @@
 <meta property="og:site_name" content="夏小雨">
 <meta property="og:description" content="最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了无数坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-16T12:45:34.842Z">
+<meta property="og:updated_time" content="2018-06-16T12:51:45.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PySpark防坑指南">
 <meta name="twitter:description" content="最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了无数坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用">
@@ -327,7 +327,7 @@
                 
               
 
-              <time title="Created: 2018-06-16 20:11:55 / Modified: 20:45:34" itemprop="dateCreated datePublished" datetime="2018-06-16T20:11:55+08:00">2018-06-16</time>
+              <time title="Created: 2018-06-16 20:11:55 / Modified: 20:51:45" itemprop="dateCreated datePublished" datetime="2018-06-16T20:11:55+08:00">2018-06-16</time>
             
 
             
@@ -367,7 +367,9 @@
       
         <p>最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了无数坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用的工具思维不太一样，所以习惯了用R用数据挖掘和建模项目的同学，可能要适应一下。</p>
 <a id="more"></a>
-<h2 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h2><p>基本上我都是从hive的表里读数据的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个hive context</span><br><span class="line">hive_context = HiveContext(sc)</span><br><span class="line"></span><br><span class="line"># 写sql读hive table，生成的df是spark dataframe，不是rdd</span><br><span class="line">df = hive_context.sql(&quot;select * from schema.tablename&quot;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h2><p>基本上我都是从hive的表里读数据的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个hive context</span></span><br><span class="line">hive_context = HiveContext(sc)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 写sql读hive table，生成的df是spark dataframe，不是rdd</span></span><br><span class="line">df = hive_context.sql(<span class="string">"select * from schema.tablename distribute by rand()"</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>坑</strong>：即便hive里的表没有数据倾斜的问题，如果不加<code>distribute by rand()</code>这句，有可能会造成spark dataframe数据倾斜，因此建议每次从hive通过sql读数据都要加上这句。</p>
 
       
     </div>
