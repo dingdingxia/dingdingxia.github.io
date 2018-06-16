@@ -102,24 +102,24 @@
 
 
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/draft/hello-world.html">
+  <meta name="description" content="最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了无数坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PySpark防坑指南">
+<meta property="og:url" content="http://yoursite.com/2018/06/16/pyspark-tutorial/index.html">
 <meta property="og:site_name" content="夏小雨">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了无数坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-04-30T06:13:34.284Z">
+<meta property="og:updated_time" content="2018-06-16T12:45:34.842Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="PySpark防坑指南">
+<meta name="twitter:description" content="最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了无数坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/draft/hello-world.html"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/16/pyspark-tutorial/"/>
 
 
 
@@ -129,7 +129,7 @@
   };
 </script>
 
-  <title>Hello World | 夏小雨</title>
+  <title>PySpark防坑指南 | 夏小雨</title>
   
 
 
@@ -245,22 +245,6 @@
   
     
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
   
 
   
@@ -287,52 +271,158 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/16/pyspark-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="夏小雨">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夏小雨">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">Hello World</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
+          <h1 class="post-title" itemprop="name headline">PySpark防坑指南
+              
+            
+          </h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-06-16 20:11:55 / Modified: 20:45:34" itemprop="dateCreated datePublished" datetime="2018-06-16T20:11:55+08:00">2018-06-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了无数坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用的工具思维不太一样，所以习惯了用R用数据挖掘和建模项目的同学，可能要适应一下。</p>
+<a id="more"></a>
+<h2 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h2><p>基本上我都是从hive的表里读数据的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个hive context</span><br><span class="line">hive_context = HiveContext(sc)</span><br><span class="line"></span><br><span class="line"># 写sql读hive table，生成的df是spark dataframe，不是rdd</span><br><span class="line">df = hive_context.sql(&quot;select * from schema.tablename&quot;)</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
+
     
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/07/graph-in-fraud-detection/" rel="next" title="团伙交易欺诈模型实践">
+                <i class="fa fa-chevron-left"></i> 团伙交易欺诈模型实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
 
 
 
-    
-    
-    
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -427,7 +517,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#读数据"><span class="nav-number">1.</span> <span class="nav-text">读数据</span></a></li></ol></div>
             
 
           </div>
