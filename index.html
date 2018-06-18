@@ -291,6 +291,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="夏小雨">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夏小雨">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/18/install-tensorflow-from-anaconda/" itemprop="url">
+                  macos通过anaconda安装tensorflow
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-06-18 09:50:04 / Modified: 10:12:38" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n tensorflow pip python=3.6</span><br><span class="line">$ source activate tensorflow</span><br><span class="line">$ pip install tensorflow</span><br></pre></td></tr></table></figure></p>
+<p>启动tensorflow，测试是否安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ python</span><br><span class="line">&gt;&gt;&gt; import tensorflow as tf</span><br><span class="line">&gt;&gt;&gt; hello = tf.constant(&apos;Hello, TensorFlow!&apos;)</span><br><span class="line">&gt;&gt;&gt; sess = tf.Session()</span><br><span class="line">&gt;&gt;&gt; print(sess.run(hello))</span><br><span class="line">b&apos;Hello, TensorFlow!&apos;</span><br></pre></td></tr></table></figure></p>
+<p>遇到报错<code>AttributeError: module &#39;tensorflow&#39; has no attribute &#39;constant&#39;</code>，是因为没有启动tensorflow，需要<code>source activate tensorflow</code>。</p>
+<p>在Spyder中启动tensorflow，需要在tensorflow的环境下安装spyder，并启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ cd /Users/xiatt/anaconda/envs/tensorflow/</span><br><span class="line">$ conda install spyder</span><br><span class="line">$ spyder</span><br></pre></td></tr></table></figure></p>
+<p>TaDa~大功告成。</p>
+<p>Ref：<br><a href="https://blog.csdn.net/familyshizhouna/article/details/77249110" target="_blank" rel="noopener">在spyder下使用TensorFlow</a><br><a href="https://www.jianshu.com/p/d54546ab315e" target="_blank" rel="noopener">Mac下通过Anaconda安装Tensorflow</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/16/pyspark-tutorial/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1231,7 +1376,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
