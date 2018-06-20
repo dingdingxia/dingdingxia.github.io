@@ -111,7 +111,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/images/fake_network.jpeg">
 <meta property="og:image" content="http://yoursite.com/images/two_mode_network.jpeg">
-<meta property="og:updated_time" content="2018-06-15T09:05:49.310Z">
+<meta property="og:updated_time" content="2018-06-18T08:52:22.400Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="团伙交易欺诈模型实践">
 <meta name="twitter:description" content="交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一家小型支付公司而">
@@ -356,7 +356,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-06-15 17:05:49" itemprop="dateModified" datetime="2018-06-15T17:05:49+08:00">2018-06-15</time>
+                <time title="Modified: 2018-06-18 16:52:22" itemprop="dateModified" datetime="2018-06-18T16:52:22+08:00">2018-06-18</time>
               
             
           </span>
@@ -413,7 +413,7 @@
 <h3 id="基于network的团伙发现"><a href="#基于network的团伙发现" class="headerlink" title="基于network的团伙发现"></a>基于network的团伙发现</h3><p>这其实是一个很有意思的东西，虽然没有复杂高深的算法。有一次东北有个团伙，最后加起来被盗卡的大概有七百多人吧，是个超级大团伙，这也是我们最初开发团伙欺诈模型要解决的问题。我发现他们作案的时候有一个特征，虽然他们经常换IP，但是还没到操作一个账号就换一个IP的程度。举个例子，在Day 1操作A,B,C,D四个账号时用ip1，操作E,F,G,H时用ip2；在Day 2操作A,C,E,F时用ip3，操作B,D,G,H时用ip4，这时如果我们用ip作为联结去画这些人的network，会得到下面这张图。这是一个bipartite graph，这个network里有两种类型的node，一种是会员，一种是ip。</p>
 <p><img src="/images/fake_network.jpeg" alt="a fake ip network"></p>
 <p>计算每个账号的degree,weighted degree, 及weighted degree/degree。degree计算的是每个账号关联了多少账号，weighted degree计算的是每个账号关联了多少次，所以weighted degree/degree计算的是每个账号和它联结的账号平均共用了几次IP。大部分group的weighted degree/degree为1，因为大部分正常人只会碰巧和别人共用一个IP。如果一个group的weighted degree/degree为2，说明这个group里的人平均共用过2个不同的IP，这是一个非常可疑的group。在实践中，我们发现weighted degree/degree大于1.1就可以划为待查group，准确率非常高。</p>
-<h2 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h2><p>在我们输出可疑待查账号的同时，我们也画出每个group的network，清晰地展示group中的成员是如何联结起来的，在实践中，这是案件调查同事了解团伙结构的一个工具。下图是一个真实的网络，其中圆形表示会员，方块表示除会员之外的其他属性。已经被管制的会员由橘黄色表色，如会员A/D/G，尚未管制的会员用绿色表示。我们可以看到，会员A/B/C/D/F/I/J/G都和Bankcard 2有过资金往来，其中会员A和C还共用过设备Device_1，D和F共用过Device_3（其他还有很多关联，不一一细数了），其中A/D/G已经被管制，那么这个网络里的人就都很可疑了。</p>
+<h2 id="Visualization"><a href="#Visualization" class="headerlink" title="Visualization"></a>Visualization</h2><p>在我们输出可疑待查账号的同时，我们也画出每个group的network，来展示group中的成员是如何联结起来的，在实践中，这是案件调查同事了解团伙结构的一个工具。下图是一个真实的网络，其中圆形表示会员，方块表示除会员之外的其他属性。已经被管制的会员由橘黄色表色，如会员A/D/G，尚未管制的会员用绿色表示。我们可以看到，会员A/B/C/D/F/I/J/G都和Bankcard 2有过资金往来，其中会员A和C还共用过设备Device_1，D和F共用过Device_3（其他还有很多关联，不一一细数了），其中A/D/G已经被管制，那么这个网络里的人就都很可疑了。</p>
 <p><img src="/images/two_mode_network.jpeg" alt="example two-mode network"></p>
 
       

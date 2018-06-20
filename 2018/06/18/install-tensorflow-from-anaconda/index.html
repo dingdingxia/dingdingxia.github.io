@@ -102,17 +102,17 @@
 
 
 
-  <meta name="description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。123$ conda create -n tensorflow pip python=3.6$ source activate tensorflow$ pip install tensorflow 启动tensorflow，测试是否安装成功：1234567$ source activate">
+  <meta name="description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macos通过anaconda安装tensorflow">
 <meta property="og:url" content="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/index.html">
 <meta property="og:site_name" content="夏小雨">
-<meta property="og:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。123$ conda create -n tensorflow pip python=3.6$ source activate tensorflow$ pip install tensorflow 启动tensorflow，测试是否安装成功：1234567$ source activate">
+<meta property="og:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-18T02:12:38.077Z">
+<meta property="og:updated_time" content="2018-06-19T00:53:35.855Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macos通过anaconda安装tensorflow">
-<meta name="twitter:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。123$ conda create -n tensorflow pip python=3.6$ source activate tensorflow$ pip install tensorflow 启动tensorflow，测试是否安装成功：1234567$ source activate">
+<meta name="twitter:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
 
 
 
@@ -336,12 +336,24 @@
                 
               
 
-              <time title="Created: 2018-06-18 09:50:04 / Modified: 10:12:38" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
+              <time title="Created: 2018-06-18 09:50:04" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-19 08:53:35" itemprop="dateModified" datetime="2018-06-19T08:53:35+08:00">2018-06-19</time>
               
             
           </span>
@@ -374,7 +386,9 @@
       
 
       
-        <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n tensorflow pip python=3.6</span><br><span class="line">$ source activate tensorflow</span><br><span class="line">$ pip install tensorflow</span><br></pre></td></tr></table></figure></p>
+        <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n tensorflow pip python=3.6</span><br><span class="line">$ source activate tensorflow</span><br><span class="line">$ pip install tensorflow</span><br></pre></td></tr></table></figure>
 <p>启动tensorflow，测试是否安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ python</span><br><span class="line">&gt;&gt;&gt; import tensorflow as tf</span><br><span class="line">&gt;&gt;&gt; hello = tf.constant(&apos;Hello, TensorFlow!&apos;)</span><br><span class="line">&gt;&gt;&gt; sess = tf.Session()</span><br><span class="line">&gt;&gt;&gt; print(sess.run(hello))</span><br><span class="line">b&apos;Hello, TensorFlow!&apos;</span><br></pre></td></tr></table></figure></p>
 <p>遇到报错<code>AttributeError: module &#39;tensorflow&#39; has no attribute &#39;constant&#39;</code>，是因为没有启动tensorflow，需要<code>source activate tensorflow</code>。</p>
 <p>在Spyder中启动tensorflow，需要在tensorflow的环境下安装spyder，并启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ cd /Users/xiatt/anaconda/envs/tensorflow/</span><br><span class="line">$ conda install spyder</span><br><span class="line">$ spyder</span><br></pre></td></tr></table></figure></p>

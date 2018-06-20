@@ -337,12 +337,24 @@
                 
               
 
-              <time title="Created: 2018-06-18 09:50:04 / Modified: 10:12:38" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
+              <time title="Created: 2018-06-18 09:50:04" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-06-19 08:53:35" itemprop="dateModified" datetime="2018-06-19T08:53:35+08:00">2018-06-19</time>
               
             
           </span>
@@ -376,15 +388,14 @@
 
       
         
-          
-            <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n tensorflow pip python=3.6</span><br><span class="line">$ source activate tensorflow</span><br><span class="line">$ pip install tensorflow</span><br></pre></td></tr></table></figure></p>
-<p>启动tensorflow，测试是否安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ python</span><br><span class="line">&gt;&gt;&gt; import tensorflow as tf</span><br><span class="line">&gt;&gt;&gt; hello = tf.constant(&apos;Hello, TensorFlow!&apos;)</span><br><span class="line">&gt;&gt;&gt; sess = tf.Session()</span><br><span class="line">&gt;&gt;&gt; print(sess.run(hello))</span><br><span class="line">b&apos;Hello, TensorFlow!&apos;</span><br></pre></td></tr></table></figure></p>
-<p>遇到报错<code>AttributeError: module &#39;tensorflow&#39; has no attribute &#39;constant&#39;</code>，是因为没有启动tensorflow，需要<code>source activate tensorflow</code>。</p>
-<p>在Spyder中启动tensorflow，需要在tensorflow的环境下安装spyder，并启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ cd /Users/xiatt/anaconda/envs/tensorflow/</span><br><span class="line">$ conda install spyder</span><br><span class="line">$ spyder</span><br></pre></td></tr></table></figure></p>
-<p>TaDa~大功告成。</p>
-<p>Ref：<br><a href="https://blog.csdn.net/familyshizhouna/article/details/77249110" target="_blank" rel="noopener">在spyder下使用TensorFlow</a><br><a href="https://www.jianshu.com/p/d54546ab315e" target="_blank" rel="noopener">Mac下通过Anaconda安装Tensorflow</a></p>
-
-          
+          <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/06/18/install-tensorflow-from-anaconda/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -655,7 +666,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-06-15 17:05:49" itemprop="dateModified" datetime="2018-06-15T17:05:49+08:00">2018-06-15</time>
+                <time title="Modified: 2018-06-18 16:52:22" itemprop="dateModified" datetime="2018-06-18T16:52:22+08:00">2018-06-18</time>
               
             
           </span>
