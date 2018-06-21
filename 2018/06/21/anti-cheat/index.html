@@ -109,7 +109,7 @@
 <meta property="og:site_name" content="夏小雨">
 <meta property="og:description" content="有人的地方就有江湖，有活动的地方就有水军。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-21T13:24:31.266Z">
+<meta property="og:updated_time" content="2018-06-21T13:35:25.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="反作弊大作战">
 <meta name="twitter:description" content="有人的地方就有江湖，有活动的地方就有水军。">
@@ -336,7 +336,7 @@
                 
               
 
-              <time title="Created: 2018-06-21 19:13:27 / Modified: 21:24:31" itemprop="dateCreated datePublished" datetime="2018-06-21T19:13:27+08:00">2018-06-21</time>
+              <time title="Created: 2018-06-21 19:13:27 / Modified: 21:35:25" itemprop="dateCreated datePublished" datetime="2018-06-21T19:13:27+08:00">2018-06-21</time>
             
 
             
@@ -386,22 +386,8 @@
 <p>第三步，对每笔请求，找到ip对应的省的序号。</p>
 <p>第四步，对每个种子用户，计算第三步中序号的偏度（<a href="https://baike.baidu.com/item/%E5%81%8F%E5%BA%A6/8626571" target="_blank" rel="noopener">skewness</a>），偏度越大，说明ip归属地的集中性越高；反之，偏度越小，则说明ip归属地越分散，被推荐人的请求在各个省份的分布较为平均。虽然偏度本意不是用来刻画集中性，但我们可以借来一用。</p>
 <p>同样的，我们可以对ip的具体取值也用上述步骤计算偏度。试想一下，一个正常用户，应该具有较高的ip归属地偏度和较低的ip偏度。对一个厉害的作弊用户，应该具有较低的ip归属地偏度和较低的ip偏度。对一个普通的有ip集中性的作弊用户，应该具有较高的ip归属地偏度和较高的ip偏度。</p>
-<p>在2.0模型中，我们不再使用那些容易被篡改的值，转而使用那些不易篡改、或刻意篡改的分散的信息。模型预测是是一个种子用户是否有作弊嫌疑，我们使用的变量如下，训练一个随机森林模型，评价指标Area under Precision and Recall Curve的值是0.9388，效果不错。</p>
-<ol>
-<li><p>ip_mobile_notmatch_pct：同一个种子用户的被推荐人请求，手机号的归属地和ip归属地不同的比例；</p>
-</li>
-<li><p>Secs_per_price_off：同一个种子用户，平均两次被推荐人请求的时间差；</p>
-</li>
-<li><p>ip_skew：同一个种子用户，ip取值的偏度；</p>
-</li>
-<li><p>ip_cnt：同一个种子用户，有多少个不同的ip取值</p>
-</li>
-<li><p>ip_pro_skew：同一个种子用户，ip归属地的偏度；</p>
-</li>
-<li><p>province_cnt：同一个种子用户，有多少个不同的ip归属地。</p>
-</li>
-</ol>
-<p>由于我们是预测是一个种子会员的作弊概率，一旦发现种子有问题，就拒绝之后所有的请求，因此我们模型的总体识别率高于第三方的黑名单库。但是，需要指出的是，模型中有两个变量（ip_cnt，province_cnt）是随着时间线性增加的，这可能造成在砍价初期无法识别作弊用户。另外我们必须承认，目前我们的模型开发方式是有滞后性的，先有数据积累和分析，再有模型开发，接着在下一次活动中会有较好的效果，但水军也在提升应对技巧，在下一次活动中模型的效果可能就会衰减。</p>
+<p>在2.0模型中，我们不再使用那些容易被篡改的值，转而使用那些不易篡改（如时间）、或刻意篡改的分散（如ip）的信息。模型预测的是一个种子用户是否有作弊嫌疑，我们训练一个随机森林模型，评价指标Area under Precision and Recall Curve的值是0.9388，效果不错。</p>
+<p>由于我们是预测是一个种子会员的作弊概率，一旦发现种子有问题，就拒绝之后所有的请求，因此我们模型的总体识别率高于第三方的黑名单库。但是，需要指出的是，模型中有的变量（如累计ip归属地个数）是随着时间线性增加的，这可能造成在活动初期无法识别作弊用户。另外我们必须承认，目前我们的模型开发方式是有滞后性的，先有数据积累和分析，再有模型开发，接着在下一次活动中会有较好的效果，但水军也在提升应对技巧，在下下一次活动中模型的效果可能就会衰减。</p>
 
       
     </div>
