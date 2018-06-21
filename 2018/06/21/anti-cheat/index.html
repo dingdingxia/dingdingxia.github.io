@@ -102,24 +102,24 @@
 
 
 
-  <meta name="description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
+  <meta name="description" content="有人的地方就有江湖，有活动的地方就有水军。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="macos通过anaconda安装tensorflow">
-<meta property="og:url" content="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/index.html">
+<meta property="og:title" content="反作弊大作战">
+<meta property="og:url" content="http://yoursite.com/2018/06/21/anti-cheat/index.html">
 <meta property="og:site_name" content="夏小雨">
-<meta property="og:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
+<meta property="og:description" content="有人的地方就有江湖，有活动的地方就有水军。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-19T00:53:35.855Z">
+<meta property="og:updated_time" content="2018-06-21T13:24:31.266Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="macos通过anaconda安装tensorflow">
-<meta name="twitter:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
+<meta name="twitter:title" content="反作弊大作战">
+<meta name="twitter:description" content="有人的地方就有江湖，有活动的地方就有水军。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/21/anti-cheat/"/>
 
 
 
@@ -129,7 +129,7 @@
   };
 </script>
 
-  <title>macos通过anaconda安装tensorflow | 夏小雨</title>
+  <title>反作弊大作战 | 夏小雨</title>
   
 
 
@@ -294,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/21/anti-cheat/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="夏小雨">
@@ -311,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">macos通过anaconda安装tensorflow
+          <h1 class="post-title" itemprop="name headline">反作弊大作战
               
             
           </h1>
@@ -336,24 +336,12 @@
                 
               
 
-              <time title="Created: 2018-06-18 09:50:04" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
+              <time title="Created: 2018-06-21 19:13:27 / Modified: 21:24:31" itemprop="dateCreated datePublished" datetime="2018-06-21T19:13:27+08:00">2018-06-21</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-06-19 08:53:35" itemprop="dateModified" datetime="2018-06-19T08:53:35+08:00">2018-06-19</time>
               
             
           </span>
@@ -386,14 +374,34 @@
       
 
       
-        <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。</p>
+        <p>有人的地方就有江湖，有活动的地方就有水军。</p>
 <a id="more"></a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n tensorflow pip python=3.6</span><br><span class="line">$ source activate tensorflow</span><br><span class="line">$ pip install tensorflow</span><br></pre></td></tr></table></figure>
-<p>启动tensorflow，测试是否安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ python</span><br><span class="line">&gt;&gt;&gt; import tensorflow as tf</span><br><span class="line">&gt;&gt;&gt; hello = tf.constant(&apos;Hello, TensorFlow!&apos;)</span><br><span class="line">&gt;&gt;&gt; sess = tf.Session()</span><br><span class="line">&gt;&gt;&gt; print(sess.run(hello))</span><br><span class="line">b&apos;Hello, TensorFlow!&apos;</span><br></pre></td></tr></table></figure></p>
-<p>遇到报错<code>AttributeError: module &#39;tensorflow&#39; has no attribute &#39;constant&#39;</code>，是因为没有启动tensorflow，需要<code>source activate tensorflow</code>。</p>
-<p>在Spyder中启动tensorflow，需要在tensorflow的环境下安装spyder，并启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ cd /Users/xiatt/anaconda/envs/tensorflow/</span><br><span class="line">$ conda install spyder</span><br><span class="line">$ spyder</span><br></pre></td></tr></table></figure></p>
-<p>TaDa~大功告成。</p>
-<p>Ref：<br><a href="https://blog.csdn.net/familyshizhouna/article/details/77249110" target="_blank" rel="noopener">在spyder下使用TensorFlow</a><br><a href="https://www.jianshu.com/p/d54546ab315e" target="_blank" rel="noopener">Mac下通过Anaconda安装Tensorflow</a></p>
+<p>一般拉新类活动通过老拉新，给新用户优惠的同时，给老用户也有奖励，有的老用户一天能拉来几百上千人。我们称老用户为种子用户，新用户为被推荐人。本文仅关注这类有种子用户的活动。</p>
+<p>水军可以被称之为“军”，集中性和规模性是一个很大的特点。所以防水军的第一步，是把所有可能会有集中性的维度全部做累计，超过阀值后拒绝。虽然这只能防住技术较弱的水军，但毋以善小而不为。这些维度可以包括手机号段，ip，设备号（H5不准，在cookies里埋随机数作为唯一标识），是否有设备信息，是否为社交渠道，从user-agent里解析出的操作系统版本，手机型号等等。</p>
+<p>但所有累计类规则都会面临几个问题，一是容易误伤，尤其是ip，所以通常ip阀值会设的较大，这样就引发第二个问题，阀值以下的用户必然被漏过。第三，也是最重要的，这些信息都是可以篡改的。例如，在反作弊模型1.0版上线前，大部分水军ua中解析出的渠道是浏览器而非微信，我们将这个维度应用在1.0模型中，效果很好。但后来很快水军升级了策略，篡改ua，伪装成微信，于是模型的效果就大打折扣了。</p>
+<p>集中性的特征只限于水军中的菜鸟。厉害的水军有一个特征，是分散性。他们的好友遍布五湖四海，拉来的新用户每个人都来自不同的ip，这些ip来自几十个不同的省份，大部分ip和对应请求的手机号来自于同一个省份，看着非常像正常用户。又比如，从他们拉来的新用户的ua中解析出的手机型号和版本号有很多不同的值。他们作弊的那么认真，连第三方黑名单库中也只命中很少一部分被推荐人。</p>
+<p>试想，有多少人的朋友会遍布在全国三十多个省，每个省的人数都还挺平均的？大多数人的朋友一般集中在某几个地方，家乡，另一半的家乡，曾经或现在上学的城市，曾经或现在上班的城市。比如一般来说一个上海人的朋友圈基本上都集中在上海，当然别的省份也有几个朋友，但总的来说比在上海的朋友少的多。因此，在2.0的反作弊模型中，我们构造这样一个刻画集中度的统计值：</p>
+<p>第一步，对每个种子用户，按ip归属省来统计被推荐人的请求数。</p>
+<p>第二步，对每个种子用户，将省份按请求数从多到少降序排列，并打上序号。即ip请求最多的省为1，第二多的省为2，以此类推。</p>
+<p>第三步，对每笔请求，找到ip对应的省的序号。</p>
+<p>第四步，对每个种子用户，计算第三步中序号的偏度（<a href="https://baike.baidu.com/item/%E5%81%8F%E5%BA%A6/8626571" target="_blank" rel="noopener">skewness</a>），偏度越大，说明ip归属地的集中性越高；反之，偏度越小，则说明ip归属地越分散，被推荐人的请求在各个省份的分布较为平均。虽然偏度本意不是用来刻画集中性，但我们可以借来一用。</p>
+<p>同样的，我们可以对ip的具体取值也用上述步骤计算偏度。试想一下，一个正常用户，应该具有较高的ip归属地偏度和较低的ip偏度。对一个厉害的作弊用户，应该具有较低的ip归属地偏度和较低的ip偏度。对一个普通的有ip集中性的作弊用户，应该具有较高的ip归属地偏度和较高的ip偏度。</p>
+<p>在2.0模型中，我们不再使用那些容易被篡改的值，转而使用那些不易篡改、或刻意篡改的分散的信息。模型预测是是一个种子用户是否有作弊嫌疑，我们使用的变量如下，训练一个随机森林模型，评价指标Area under Precision and Recall Curve的值是0.9388，效果不错。</p>
+<ol>
+<li><p>ip_mobile_notmatch_pct：同一个种子用户的被推荐人请求，手机号的归属地和ip归属地不同的比例；</p>
+</li>
+<li><p>Secs_per_price_off：同一个种子用户，平均两次被推荐人请求的时间差；</p>
+</li>
+<li><p>ip_skew：同一个种子用户，ip取值的偏度；</p>
+</li>
+<li><p>ip_cnt：同一个种子用户，有多少个不同的ip取值</p>
+</li>
+<li><p>ip_pro_skew：同一个种子用户，ip归属地的偏度；</p>
+</li>
+<li><p>province_cnt：同一个种子用户，有多少个不同的ip归属地。</p>
+</li>
+</ol>
+<p>由于我们是预测是一个种子会员的作弊概率，一旦发现种子有问题，就拒绝之后所有的请求，因此我们模型的总体识别率高于第三方的黑名单库。但是，需要指出的是，模型中有两个变量（ip_cnt，province_cnt）是随着时间线性增加的，这可能造成在砍价初期无法识别作弊用户。另外我们必须承认，目前我们的模型开发方式是有滞后性的，先有数据积累和分析，再有模型开发，接着在下一次活动中会有较好的效果，但水军也在提升应对技巧，在下一次活动中模型的效果可能就会衰减。</p>
 
       
     </div>
@@ -421,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/16/pyspark-tutorial/" rel="next" title="PySpark数据处理与防坑指南">
-                <i class="fa fa-chevron-left"></i> PySpark数据处理与防坑指南
+              <a href="/2018/06/18/install-tensorflow-from-anaconda/" rel="next" title="macos通过anaconda安装tensorflow">
+                <i class="fa fa-chevron-left"></i> macos通过anaconda安装tensorflow
               </a>
             
           </div>
@@ -430,10 +438,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/21/anti-cheat/" rel="prev" title="反作弊大作战">
-                反作弊大作战 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
