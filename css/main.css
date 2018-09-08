@@ -1826,7 +1826,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #475220;
+  background: #8ea82f;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2492,6 +2492,9 @@ a {
 hr {
   margin: 20px 0;
   height: 2px;
+}
+ul li {
+  list-style: circle;
 }
 .main-inner {
   margin-top: 80px;
