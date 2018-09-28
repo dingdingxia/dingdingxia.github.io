@@ -303,6 +303,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/28/nn-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="夏小雨">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="夏小雨">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/28/nn-notes/" itemprop="url">
+                  Neural Networks 学习笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-09-28 13:47:13 / Modified: 17:34:31" itemprop="dateCreated datePublished" datetime="2018-09-28T13:47:13+08:00">2018-09-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。</p>
+<h2 id="Matrix-multiplication-in-forward-propagation"><a href="#Matrix-multiplication-in-forward-propagation" class="headerlink" title="Matrix multiplication in forward propagation"></a>Matrix multiplication in forward propagation</h2><p>Initial layer里，每个node表示一个feature/variable。如果dataset中有p个变量，initial layer就有p+1个nodes，其中1是bias node，可以理解为intercept。为了简化问题，我们假设没有bias node，那么initial layer的matrix表达为(m,p)，其中m是dataset中的样本数。hidden layer中的每个node可以想象成一个逻辑回归中的一个y，所以每个node应该表示为(m,1)。现在，我们把hidden layer作为一个整体，想作是一个新的initial layer，一个node就是一个变量，那么这个整体的matrix表达就是(m,n1)，其中n1是hidden layer的node数。那么很自然的，从一个(m,p)的matrix要得到一个(m,n1)的matrix，必须乘以一个(p,n1)的matrix，而这就是weights的matrix。</p>
+<p>good reference:</p>
+<p><a href="https://www.youtube.com/watch?v=vuYcFz86ryo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=vuYcFz86ryo
+</a></p>
+<h2 id="Cost-function-and-Back-propagation"><a href="#Cost-function-and-Back-propagation" class="headerlink" title="Cost function and Back propagation"></a>Cost function and Back propagation</h2><p>对binary classification来说，cost function和基本和逻辑回归是一样的，区别是要加总所有的output node。为了minimize这个cost function，back propagation方法出现了。原理是很intuitive的，为了要minimize output layer的cost，必须minimize output layer前一个layer的cost，为了minimize output layer前一个layer的cost，必须minimize前前一个layer的cost，这就是所谓的反向传播。有些tutorial里会将它描述成minimize每个layer的error，这个我就有点不太理解了，除了最后一个layer能被称作error外，hidden layer哪里来的error呢？所以我偏向于纯粹数学公式的角度，用微积分的chain rule分解gradient，并逐层向下分解。这里有两个excellent的youtube视频：</p>
+<p><a href="https://www.youtube.com/watch?v=vuYcFz86ryo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=vuYcFz86ryo</a></p>
+<p><a href="https://www.youtube.com/watch?v=vuYcFz86ryo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=vuYcFz86ryo</a></p>
+<h2 id="Activation-function-and-weights-initialize"><a href="#Activation-function-and-weights-initialize" class="headerlink" title="Activation function and weights initialize"></a>Activation function and weights initialize</h2><p>Activation function有很多种可以选啦，常见的有sigmoid, tanh, relu等。</p>
+<p><a href="https://stats.stackexchange.com/questions/162988/why-sigmoid-function-instead-of-anything-else" target="_blank" rel="noopener">why relu is nonlinear?</a></p>
+<p><a href="https://stats.stackexchange.com/questions/162988/why-sigmoid-function-instead-of-anything-else" target="_blank" rel="noopener">why sigmoid function instead of anything else?</a></p>
+<p>weights initialize最常见的就是ramdom initialize了，但其实有很多种其他的方法，keras就提供了多种，看别人的结果貌似会有较大改进，可以试着tune一下。</p>
+<h2 id="Parameter-tuning"><a href="#Parameter-tuning" class="headerlink" title="Parameter tuning"></a>Parameter tuning</h2><p>由于train一个神经网络要较长时间，用grid search不是很合理。通常random search已经会有较好的结果，但注意random search时，当没有enough data points时，它不会cover所有的parameter space，所以会造成它选取的有些点很相近，有些点又取不到。解决办法参考：<br><a href="https://stats.stackexchange.com/questions/162988/why-sigmoid-function-instead-of-anything-else" target="_blank" rel="noopener">Hyperparameter optimization ofr neural networks</a></p>
+<p>另外，还有一种bayesian optimization，它的主要思想是，下一组parameter应该是基于之前parameter组合的结果的，这和我们人工做决定时是一样的，但grid search就没有利用到之前的信息，有些parameter组合肯定表现不会好的，也被评估了，浪费了许多计算资源。相比较grid search而言，bayesian optimization要计算的parameter组合会少的多。如何做bayesian optimization，同样可以参见上面的链接。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/travel-in-xinjiang/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1717,7 +1888,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -1732,7 +1903,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
