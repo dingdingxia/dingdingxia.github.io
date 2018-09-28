@@ -106,17 +106,17 @@
 
 
 
-  <meta name="description" content="关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。 Matrix multiplication in forward propagationInitial layer里，每个node表示一个feature/variable">
+  <meta name="description" content="关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Neural Networks 学习笔记">
 <meta property="og:url" content="http://yoursite.com/2018/09/28/nn-notes/index.html">
 <meta property="og:site_name" content="夏小雨">
-<meta property="og:description" content="关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。 Matrix multiplication in forward propagationInitial layer里，每个node表示一个feature/variable">
+<meta property="og:description" content="关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-28T09:34:31.539Z">
+<meta property="og:updated_time" content="2018-09-28T09:37:00.368Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Neural Networks 学习笔记">
-<meta name="twitter:description" content="关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。 Matrix multiplication in forward propagationInitial layer里，每个node表示一个feature/variable">
+<meta name="twitter:description" content="关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。">
 
 
 
@@ -348,7 +348,7 @@
                 
               
 
-              <time title="Created: 2018-09-28 13:47:13 / Modified: 17:34:31" itemprop="dateCreated datePublished" datetime="2018-09-28T13:47:13+08:00">2018-09-28</time>
+              <time title="Created: 2018-09-28 13:47:13 / Modified: 17:37:00" itemprop="dateCreated datePublished" datetime="2018-09-28T13:47:13+08:00">2018-09-28</time>
             
 
             
@@ -405,6 +405,7 @@
 
       
         <p>关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。</p>
+<a id="more"></a>
 <h2 id="Matrix-multiplication-in-forward-propagation"><a href="#Matrix-multiplication-in-forward-propagation" class="headerlink" title="Matrix multiplication in forward propagation"></a>Matrix multiplication in forward propagation</h2><p>Initial layer里，每个node表示一个feature/variable。如果dataset中有p个变量，initial layer就有p+1个nodes，其中1是bias node，可以理解为intercept。为了简化问题，我们假设没有bias node，那么initial layer的matrix表达为(m,p)，其中m是dataset中的样本数。hidden layer中的每个node可以想象成一个逻辑回归中的一个y，所以每个node应该表示为(m,1)。现在，我们把hidden layer作为一个整体，想作是一个新的initial layer，一个node就是一个变量，那么这个整体的matrix表达就是(m,n1)，其中n1是hidden layer的node数。那么很自然的，从一个(m,p)的matrix要得到一个(m,n1)的matrix，必须乘以一个(p,n1)的matrix，而这就是weights的matrix。</p>
 <p>good reference:</p>
 <p><a href="https://www.youtube.com/watch?v=vuYcFz86ryo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=vuYcFz86ryo
