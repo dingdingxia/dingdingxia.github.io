@@ -106,25 +106,25 @@
 
 
 
-  <meta name="description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
+  <meta name="description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。 首先，我们得明确，所有model interpretation都是基于fixed model，即已经tr">
 <meta name="keywords" content="技术">
 <meta property="og:type" content="article">
-<meta property="og:title" content="macos通过anaconda安装tensorflow">
-<meta property="og:url" content="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/index.html">
+<meta property="og:title" content="解释黑箱模型">
+<meta property="og:url" content="http://yoursite.com/2018/09/30/interprete-black-box-model/index.html">
 <meta property="og:site_name" content="夏小雨">
-<meta property="og:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
+<meta property="og:description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。 首先，我们得明确，所有model interpretation都是基于fixed model，即已经tr">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-30T06:44:32.181Z">
+<meta property="og:updated_time" content="2018-10-08T09:26:16.225Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="macos通过anaconda安装tensorflow">
-<meta name="twitter:description" content="安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。">
+<meta name="twitter:title" content="解释黑箱模型">
+<meta name="twitter:description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。 首先，我们得明确，所有model interpretation都是基于fixed model，即已经tr">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/30/interprete-black-box-model/"/>
 
 
 
@@ -134,7 +134,7 @@
   };
 </script>
 
-  <title>macos通过anaconda安装tensorflow | 夏小雨</title>
+  <title>解释黑箱模型 | 夏小雨</title>
   
 
 
@@ -307,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/30/interprete-black-box-model/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="夏小雨">
@@ -324,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">macos通过anaconda安装tensorflow
+          <h1 class="post-title" itemprop="name headline">解释黑箱模型
               
             
           </h1>
@@ -349,7 +349,7 @@
                 
               
 
-              <time title="Created: 2018-06-18 09:50:04" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
+              <time title="Created: 2018-09-30 14:41:51" itemprop="dateCreated datePublished" datetime="2018-09-30T14:41:51+08:00">2018-09-30</time>
             
 
             
@@ -366,7 +366,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-09-30 14:44:32" itemprop="dateModified" datetime="2018-09-30T14:44:32+08:00">2018-09-30</time>
+                <time title="Modified: 2018-10-08 17:26:16" itemprop="dateModified" datetime="2018-10-08T17:26:16+08:00">2018-10-08</time>
               
             
           </span>
@@ -399,14 +399,58 @@
       
 
       
-        <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。</p>
-<a id="more"></a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n tensorflow pip python=3.6</span><br><span class="line">$ source activate tensorflow</span><br><span class="line">$ pip install tensorflow</span><br></pre></td></tr></table></figure>
-<p>启动tensorflow，测试是否安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ python</span><br><span class="line">&gt;&gt;&gt; import tensorflow as tf</span><br><span class="line">&gt;&gt;&gt; hello = tf.constant(&apos;Hello, TensorFlow!&apos;)</span><br><span class="line">&gt;&gt;&gt; sess = tf.Session()</span><br><span class="line">&gt;&gt;&gt; print(sess.run(hello))</span><br><span class="line">b&apos;Hello, TensorFlow!&apos;</span><br></pre></td></tr></table></figure></p>
-<p>遇到报错<code>AttributeError: module &#39;tensorflow&#39; has no attribute &#39;constant&#39;</code>，是因为没有启动tensorflow，需要<code>source activate tensorflow</code>。</p>
-<p>在Spyder中启动tensorflow，需要在tensorflow的环境下安装spyder，并启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ source activate tensorflow</span><br><span class="line">$ cd /Users/xiatt/anaconda/envs/tensorflow/</span><br><span class="line">$ conda install spyder</span><br><span class="line">$ spyder</span><br></pre></td></tr></table></figure></p>
-<p>TaDa~大功告成。</p>
-<p>Ref：<br><a href="https://blog.csdn.net/familyshizhouna/article/details/77249110" target="_blank" rel="noopener">在spyder下使用TensorFlow</a><br><a href="https://www.jianshu.com/p/d54546ab315e" target="_blank" rel="noopener">Mac下通过Anaconda安装Tensorflow</a></p>
+        <p>当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。</p>
+<p>首先，我们得明确，所有model interpretation都是基于fixed model，即已经train好的model，任何需要retrain model得出variable贡献的方法都是不合适的，因为我们想要知道的是在这个train好的model里这个variable的作用。</p>
+<p>我将这些方法和常用的术语都列在这儿，可以比较清晰地看出这些方法不同的侧重点。</p>
+<p><em>variable importance</em></p>
+<p>变量对form model overall的贡献。</p>
+<p><em>variable contribution</em></p>
+<p>变量对模型prediction overall的影响程度</p>
+<p><em>Partial dependence plots &amp; Individual conditional expectation (ICE) plots</em></p>
+<p>保持其他所有变量不变的情况下，变化target variable，看prediction的变化。ICE plots对每个observation画一条线，partial dependence plot是一个summary level的图，可以理解为average了ICE plots。</p>
+<p><em>LIME</em></p>
+<p>Local interpretable model-agnostic explanations (LIME) 是看单个observation的prediction的值受哪些变量的影响。</p>
+<p>从上面的简介可以看出，我们可以将解释黑箱模型的方法分为几类：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>度量对象</th>
+<th>作用对象</th>
+<th>结果类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>variable importance</td>
+<td>form model</td>
+<td>overall</td>
+<td>numeric value</td>
+<td></td>
+</tr>
+<tr>
+<td>variable contribution</td>
+<td>prediction</td>
+<td>overall</td>
+<td>numeric value</td>
+<td></td>
+</tr>
+<tr>
+<td>Partial dependence plots &amp; ICE plots</td>
+<td>prediction</td>
+<td>overall/individual</td>
+<td>plot</td>
+<td></td>
+</tr>
+<tr>
+<td>LIME</td>
+<td>prediction</td>
+<td>individual</td>
+<td>numeric value</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
@@ -440,8 +484,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/16/pyspark-tutorial/" rel="next" title="PySpark数据处理与防坑指南">
-                <i class="fa fa-chevron-left"></i> PySpark数据处理与防坑指南
+              <a href="/2018/09/28/nn-notes/" rel="next" title="Neural Networks 学习笔记">
+                <i class="fa fa-chevron-left"></i> Neural Networks 学习笔记
               </a>
             
           </div>
@@ -449,10 +493,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/21/anti-cheat/" rel="prev" title="反作弊大作战">
-                反作弊大作战 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
