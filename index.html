@@ -366,7 +366,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-10-08 17:29:17" itemprop="dateModified" datetime="2018-10-08T17:29:17+08:00">2018-10-08</time>
+                <time title="Modified: 2018-10-08 17:36:51" itemprop="dateModified" datetime="2018-10-08T17:36:51+08:00">2018-10-08</time>
               
             
           </span>
@@ -404,26 +404,20 @@
             <p>当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。</p>
 <p>首先，我们得明确，所有model interpretation都是基于fixed model，即已经train好的model，任何需要retrain model得出variable贡献的方法都是不合适的，因为我们想要知道的是在这个train好的model里这个variable的作用。</p>
 <p>我将这些方法和常用的术语都列在这儿，可以比较清晰地看出这些方法不同的侧重点。</p>
-<p>&nbsp;</p>
-<p><strong>variable importance</strong></p>
-<p>变量对form model overall的贡献。</p>
-<p>&nbsp;</p>
-<p><strong>variable contribution</strong></p>
-<p>变量对模型prediction overall的影响程度</p>
-<p>&nbsp;</p>
+<p><strong>variable importance</strong>: 变量对form model overall的贡献，根据不同的“贡献”的定义，有好几种方法计算方法。</p>
+<p><strong>variable contribution</strong>: 变量对模型prediction overall的影响程度。</p>
 <p><strong>Partial dependence plots &amp; Individual conditional expectation (ICE) plots</strong></p>
 <p>保持其他所有变量不变的情况下，变化target variable，看prediction的变化。ICE plots对每个observation画一条线，partial dependence plot是一个summary level的图，可以理解为average了ICE plots。</p>
-<p>&nbsp;</p>
-<p><strong>LIME</strong></p>
-<p>Local interpretable model-agnostic explanations (LIME) 是看单个observation的prediction的值受哪些变量的影响。</p>
+<p><strong>Local interpretable model-agnostic explanations (LIME)</strong> 是看单个observation的prediction的值受哪些变量的影响。</p>
 <p>从上面的简介可以看出，我们可以将解释黑箱模型的方法分为几类，它们从不同维度来解释模型：</p>
 <table>
 <thead>
 <tr>
 <th>方法</th>
 <th>度量对象</th>
-<th>作用对象</th>
+<th>作用范围</th>
 <th>结果类型</th>
+<th>适合模型</th>
 </tr>
 </thead>
 <tbody>
@@ -432,28 +426,28 @@
 <td>form model</td>
 <td>overall</td>
 <td>numeric value</td>
-<td></td>
+<td>部分只适用于树模型</td>
 </tr>
 <tr>
 <td>variable contribution</td>
 <td>prediction</td>
 <td>overall</td>
 <td>numeric value</td>
-<td></td>
+<td>只适用于树模型</td>
 </tr>
 <tr>
 <td>Partial dependence plots &amp; ICE plots</td>
 <td>prediction</td>
 <td>overall/individual</td>
 <td>plot</td>
-<td></td>
+<td>所有模型</td>
 </tr>
 <tr>
 <td>LIME</td>
 <td>prediction</td>
 <td>individual</td>
 <td>numeric value</td>
-<td></td>
+<td>所有模型</td>
 </tr>
 </tbody>
 </table>
