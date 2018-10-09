@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="夏小雨">
 <meta property="og:description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-09T00:58:45.380Z">
+<meta property="og:updated_time" content="2018-10-09T01:57:39.780Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解释黑箱模型">
 <meta name="twitter:description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。">
@@ -366,7 +366,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-10-09 08:58:45" itemprop="dateModified" datetime="2018-10-09T08:58:45+08:00">2018-10-09</time>
+                <time title="Modified: 2018-10-09 09:57:39" itemprop="dateModified" datetime="2018-10-09T09:57:39+08:00">2018-10-09</time>
               
             
           </span>
@@ -415,17 +415,17 @@
 </thead>
 <tbody>
 <tr>
-<td>variable importance</td>
+<td>Variable importance</td>
 <td>form model</td>
 <td>overall</td>
-<td>numeric value</td>
+<td>numeric value without direction</td>
 <td>部分只适用于树模型</td>
 </tr>
 <tr>
-<td>variable contribution</td>
+<td>Variable contribution</td>
 <td>prediction</td>
 <td>overall</td>
-<td>numeric value</td>
+<td>numeric value with direction</td>
 <td>只适用于树模型</td>
 </tr>
 <tr>
@@ -439,16 +439,25 @@
 <td>LIME</td>
 <td>prediction</td>
 <td>individual</td>
-<td>numeric value</td>
+<td>numeric value with direction</td>
 <td>所有模型</td>
 </tr>
 </tbody>
 </table>
-<p><strong>variable importance</strong>: 变量对form model overall的贡献，根据不同的“贡献”的定义，有好几种方法计算方法。</p>
-<p><strong>variable contribution</strong>: 变量对模型prediction overall的影响程度。</p>
-<p><strong>Partial dependence plots &amp; Individual conditional expectation (ICE) plots</strong></p>
-<p>保持其他所有变量不变的情况下，变化target variable，看prediction的变化。ICE plots对每个observation画一条线，partial dependence plot是一个summary level的图，可以理解为average了ICE plots。</p>
+<p>&nbsp;</p>
+<p><strong>Variable importance</strong>: 变量对form model overall的贡献，根据不同的“贡献”的定义，有好几种方法计算方法。</p>
+<p><strong>Variable contribution</strong>: 变量对模型prediction overall的影响程度。</p>
+<p><strong>Partial dependence plots &amp; Individual conditional expectation (ICE) plots</strong>: 保持其他所有变量不变的情况下，变化target variable，看prediction的变化。ICE plots对每个observation画一条线，partial dependence plot是一个summary level的图，可以理解为average了ICE plots。</p>
 <p><strong>Local interpretable model-agnostic explanations (LIME)</strong>: 是看单个observation的prediction的值受哪些变量的影响。</p>
+<h1 id="Variable-importance"><a href="#Variable-importance" class="headerlink" title="Variable importance"></a>Variable importance</h1><p>Xgboost可选三种方法来计算一个variable对模型的贡献。</p>
+<p><strong>Weight</strong>: The number of times a feature is used to split the data across all trees.</p>
+<p><strong>Cover</strong>: The number of times a feature is used to split the data across all trees weighted by the number of training data points that go through those splits.</p>
+<p><strong>Gain</strong>: The average training loss reduction gained when using a feature for splitting.</p>
+<p>其中，第Gain也是sklearn计算Random forest的variable importance的方法。从计算方法可知，这三种计算方式只针对tree-based models。三种方法对应了三种“importance”的定义，选取哪一种取决于使用者对“importance”的理解，因此三种方法计算的variable importance的rank在很多情况下也是不同的。用Gain计算importance的时候，它会倾向于选择靠近叶子的feature，而不是根部的。虽然根部的feature显然是更重要的（不然也不会优先split），但根部feature的training loss reduction不一定有叶子附近的feature来的多。<a href="https://towardsdatascience.com/interpretable-machine-learning-with-xgboost-9ec80d148d27" target="_blank" rel="noopener">这篇文章</a>里有具体的例子。</p>
+<p>&nbsp;</p>
+<p><strong>Permutation importance</strong></p>
+<p>除去上述三种方法外，还有一种适用于所有模型的计算variable importance的方法，即Permutation importance。它计算的是，如果我们保持其他变量不变，随机地shuffle target variable的值，对prediction的影响。如果一个变量的值随意shuffle，prediction的准确率没有太大变化，那我们就认为这个变量是不太重要的。反之，如果prediction的准确率大幅下降，那么这个变量应该是较为重要的。</p>
+<h1 id="Variable-contribution"><a href="#Variable-contribution" class="headerlink" title="Variable contribution"></a>Variable contribution</h1><p>这是一种只适用于tree-based models的度量方法，它计算的是每个变量如何形成了最后每个leaf的prediction的。每一次split的变量，对prediction的改变，就是这个变量的contribution。这个思路，总觉得哪里有些不对。具体细节可以参考<a href="http://savvastjortjoglou.com/intrepretable-machine-learning-nfl-combine.html#Feature-Contributions" target="_blank" rel="noopener">这篇文章</a>。</p>
 
       
     </div>
@@ -491,6 +500,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/09/interprete-black-box-model/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -564,7 +577,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -632,7 +645,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable-importance"><span class="nav-number">2.</span> <span class="nav-text">Variable importance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable-contribution"><span class="nav-number">3.</span> <span class="nav-text">Variable contribution</span></a></li></ol></div>
             
 
           </div>

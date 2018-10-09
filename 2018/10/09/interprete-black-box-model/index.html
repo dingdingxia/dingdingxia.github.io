@@ -106,20 +106,24 @@
 
 
 
-  <meta property="og:type" content="website">
+  <meta name="description" content="body {   max-width: 980px;   border: 1px solid #ddd;   outline: 1300px solid #fff;   margin: 16px auto; }  body .markdown-body {   padding: 45px; }  @font-face {   font-family: fontawesome-mini;   sr">
+<meta property="og:type" content="article">
 <meta property="og:title" content="夏小雨">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/10/09/interprete-black-box-model/index.html">
 <meta property="og:site_name" content="夏小雨">
+<meta property="og:description" content="body {   max-width: 980px;   border: 1px solid #ddd;   outline: 1300px solid #fff;   margin: 16px auto; }  body .markdown-body {   padding: 45px; }  @font-face {   font-family: fontawesome-mini;   sr">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-09T01:57:28.794Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="夏小雨">
+<meta name="twitter:description" content="body {   max-width: 980px;   border: 1px solid #ddd;   outline: 1300px solid #fff;   margin: 16px auto; }  body .markdown-body {   padding: 45px; }  @font-face {   font-family: fontawesome-mini;   sr">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/09/interprete-black-box-model/"/>
 
 
 
@@ -129,7 +133,7 @@
   };
 </script>
 
-  <title>夏小雨</title>
+  <title> | 夏小雨</title>
   
 
 
@@ -185,8 +189,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,7 +229,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
     <a href="/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
   </li>
@@ -286,9 +289,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -321,10 +324,6 @@
         
         
           <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/09/interprete-black-box-model/" itemprop="url">
-                  Untitled
-                </a>
               
             
           </h1>
@@ -383,8 +382,7 @@
       
 
       
-        
-          <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="date" content="2018-09-30 14:41:51">
+        <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="date" content="2018-09-30 14:41:51">
 <meta name="tags" content="技术"><style>body {
   max-width: 980px;
   border: 1px solid #ddd;
@@ -1443,14 +1441,68 @@ body .markdown-body
 .codehilite .il{color:#009999}
 .codehilite .gc{color:#999;background-color:#EAF2F5}
 </style><title>解释黑箱模型</title></head><body><article class="markdown-body"><p>当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/09/interprete-black-box-model/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+<a id="more"></a>
+
+<p>首先，我们得明确，所有model interpretation都是基于fixed model，即已经train好的model，任何需要retrain model得出variable贡献的方法都是不合适的，因为我们想要知道的是在这个train好的model里这个variable的作用。</p>
+<h1 id="_1">概览<a class="headerlink" href="#_1" title="Permanent link"></a></h1>
+<p>我们可以将解释黑箱模型的方法分为几类，它们从不同维度来解释模型：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>度量对象</th>
+<th>作用范围</th>
+<th>结果类型</th>
+<th>适合模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Variable importance</td>
+<td>form model</td>
+<td>overall</td>
+<td>numeric value without direction</td>
+<td>部分只适用于树模型</td>
+</tr>
+<tr>
+<td>Variable contribution</td>
+<td>prediction</td>
+<td>overall</td>
+<td>numeric value with direction</td>
+<td>只适用于树模型</td>
+</tr>
+<tr>
+<td>Partial dependence plots &amp; ICE plots</td>
+<td>prediction</td>
+<td>overall/individual</td>
+<td>plot</td>
+<td>所有模型</td>
+</tr>
+<tr>
+<td>LIME</td>
+<td>prediction</td>
+<td>individual</td>
+<td>numeric value with direction</td>
+<td>所有模型</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p><strong>Variable importance</strong>: 变量对form model overall的贡献，根据不同的“贡献”的定义，有好几种方法计算方法。</p>
+<p><strong>Variable contribution</strong>: 变量对模型prediction overall的影响程度。</p>
+<p><strong>Partial dependence plots &amp; Individual conditional expectation (ICE) plots</strong>: 保持其他所有变量不变的情况下，变化target variable，看prediction的变化。ICE plots对每个observation画一条线，partial dependence plot是一个summary level的图，可以理解为average了ICE plots。</p>
+<p><strong>Local interpretable model-agnostic explanations (LIME)</strong>: 是看单个observation的prediction的值受哪些变量的影响。</p>
+<h1 id="variable-importance">Variable importance<a class="headerlink" href="#variable-importance" title="Permanent link"></a></h1>
+<p>Xgboost可选三种方法来计算一个variable对模型的贡献。</p>
+<p><strong>Weight</strong>: The number of times a feature is used to split the data across all trees.</p>
+<p><strong>Cover</strong>: The number of times a feature is used to split the data across all trees weighted by the number of training data points that go through those splits.</p>
+<p><strong>Gain</strong>: The average training loss reduction gained when using a feature for splitting.</p>
+<p>其中，第Gain也是sklearn计算Random forest的variable importance的方法。从计算方法可知，这三种计算方式只针对tree-based models。三种方法对应了三种“importance”的定义，选取哪一种取决于使用者对“importance”的理解，因此三种方法计算的variable importance的rank在很多情况下也是不同的。用Gain计算importance的时候，它会倾向于选择靠近叶子的feature，而不是根部的。虽然根部的feature显然是更重要的（不然也不会优先split），但根部feature的training loss reduction不一定有叶子附近的feature来的多。<a href="https://towardsdatascience.com/interpretable-machine-learning-with-xgboost-9ec80d148d27" target="_blank" rel="noopener">这篇文章</a>里有具体的例子。</p>
+<p>&nbsp;</p>
+<p><strong>Permutation importance</strong></p>
+<p>除去上述三种方法外，还有一种适用于所有模型的计算variable importance的方法，即Permutation importance。它计算的是，如果我们保持其他变量不变，随机地shuffle target variable的值，对prediction的影响。如果一个变量的值随意shuffle，prediction的准确率没有太大变化，那我们就认为这个变量是不太重要的。反之，如果prediction的准确率大幅下降，那么这个变量应该是较为重要的。</p>
+<h1 id="variable-contribution">Variable contribution<a class="headerlink" href="#variable-contribution" title="Permanent link"></a></h1>
+<p>这是一种只适用于tree-based models的度量方法，它计算的是每个变量如何形成了最后每个leaf的prediction的。每一次split的变量，对prediction的改变，就是这个变量的contribution。这个思路，总觉得哪里有些不对。具体细节可以参考<a href="">这篇文章</a></p></article></body></html>
       
     </div>
 
@@ -1470,168 +1522,28 @@ body .markdown-body
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/30/interprete-black-box-model/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/30/interprete-black-box-model/" itemprop="url">
-                  解释黑箱模型
-                </a>
-              
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
+              <a href="/2018/09/30/interprete-black-box-model/" rel="next" title="解释黑箱模型">
+                <i class="fa fa-chevron-left"></i> 解释黑箱模型
+              </a>
             
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-09-30 14:41:51" itemprop="dateCreated datePublished" datetime="2018-09-30T14:41:51+08:00">2018-09-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-10-09 09:57:39" itemprop="dateModified" datetime="2018-10-09T09:57:39+08:00">2018-10-09</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/30/interprete-black-box-model/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1641,1290 +1553,19 @@ body .markdown-body
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/28/nn-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/28/nn-notes/" itemprop="url">
-                  Neural Networks 学习笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-09-28 13:47:13" itemprop="dateCreated datePublished" datetime="2018-09-28T13:47:13+08:00">2018-09-28</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-29 15:55:11" itemprop="dateModified" datetime="2018-09-29T15:55:11+08:00">2018-09-29</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>关于神经网络的一些细节。其实不用懂这些也可以应用，但读书时养成的强迫症，总是想搞清楚原理，不然应用起来总觉得有点不舒服。又由于自己数学不好，所以所谓的搞懂其实也只是搞清楚intuition吧。Intuition，我最喜欢的词啦。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/28/nn-notes/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/travel-in-xinjiang/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/07/travel-in-xinjiang/" itemprop="url">
-                  2018新疆伊犁自驾路书（干货版）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-09-07 15:42:03" itemprop="dateCreated datePublished" datetime="2018-09-07T15:42:03+08:00">2018-09-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-08 13:26:37" itemprop="dateModified" datetime="2018-09-08T13:26:37+08:00">2018-09-08</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/非技术/" itemprop="url" rel="index"><span itemprop="name">非技术</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="路线"><a href="#路线" class="headerlink" title="路线"></a>路线</h2><p><img src="/images/xj22.jpeg" alt="路线图" title="路线图"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/07/travel-in-xinjiang/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/21/anti-cheat/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/21/anti-cheat/" itemprop="url">
-                  反作弊大作战
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-06-21 19:13:27" itemprop="dateCreated datePublished" datetime="2018-06-21T19:13:27+08:00">2018-06-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-30 14:43:38" itemprop="dateModified" datetime="2018-09-30T14:43:38+08:00">2018-09-30</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>有人的地方就有江湖，有活动的地方就有水军。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/21/anti-cheat/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/18/install-tensorflow-from-anaconda/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/18/install-tensorflow-from-anaconda/" itemprop="url">
-                  macos通过anaconda安装tensorflow
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-06-18 09:50:04" itemprop="dateCreated datePublished" datetime="2018-06-18T09:50:04+08:00">2018-06-18</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-30 14:44:32" itemprop="dateModified" datetime="2018-09-30T14:44:32+08:00">2018-09-30</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>安装好anaconda后，只要几句命令行就可以安装tensorflow，虽然不能用GPU，但适合我这种初学者。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/18/install-tensorflow-from-anaconda/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/16/pyspark-tutorial/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/16/pyspark-tutorial/" itemprop="url">
-                  PySpark数据处理与防坑指南
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-06-16 20:11:55" itemprop="dateCreated datePublished" datetime="2018-06-16T20:11:55+08:00">2018-06-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-30 14:43:31" itemprop="dateModified" datetime="2018-09-30T14:43:31+08:00">2018-09-30</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近完成了Spark平台的欺诈模型开发，语言为PySpark，断断续续历时三个月，中间踩了很多坑，由于公司也没有特别懂应用这块的，最后和平台基础架构的同事们一起摸索完成了这个项目。Spark版本1.6，对dataframe的支持仍不够完善，在2.0+版本里优化了不少，这也是这个项目较为苦逼的地方。Python版本2.7。Spark设计之初应该是给程序员用的，和R/matlab这种给统计学/数学生用的工具思维不太一样，所以习惯了用R用数据挖掘和建模项目的同学，可能要适应一下。以下内容并不保证完全正确，因为我对spark的接触也不是很深，所以有些理解可能是偏颇的，欢迎指正。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/16/pyspark-tutorial/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/graph-in-fraud-detection/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/07/graph-in-fraud-detection/" itemprop="url">
-                  团伙交易欺诈模型实践
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-06-07 15:38:36" itemprop="dateCreated datePublished" datetime="2018-06-07T15:38:36+08:00">2018-06-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-30 14:43:45" itemprop="dateModified" datetime="2018-09-30T14:43:45+08:00">2018-09-30</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>交易欺诈侦测模型需要在海量正常交易中找到有问题的交易。以往，模型建立在会员维度，即预测一笔交易的发起人是否有欺诈风险，训练集中一条记录代表一个会员。由于欺诈行为有一定的隐蔽性，欺诈会员的行为和属性与正常用户有一定的相似性，且正负样本的比例可以失衡到1:10000，这样的模型产生的false alarm可能在比例上很低，但从false alarm的数量上来说，仍是一个不小的数字。对一家小型支付公司而言，没有那么多的人力去review这些量的false alarm。因此，业务上对反欺诈模型的精度要求很高，同时对覆盖率也有较高的要求。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/06/07/graph-in-fraud-detection/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/30/fread-vs-read-csv/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/30/fread-vs-read-csv/" itemprop="url">
-                  R中快速读取csv文件：read_csv对比fread
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-04-30 13:49:45 / Modified: 14:03:01" itemprop="dateCreated datePublished" datetime="2018-04-30T13:49:45+08:00">2018-04-30</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>今天看到有人提问用<code>readr::read_csv()</code>读csv文件时把所有character型的变量读成factor型，HY大牛提供了一个方法用<code>dplyr</code>包的<code>mutate_if()</code>，做变量类型转换速度很快。我后来搜索了一下<code>data.table</code>包里<code>fread()</code>读csv时可以直接设置<code>stringsAsFactors = T</code>。所以就对比了一下<code>readr::read_csv()</code>+<code>dplyr::mutate_if()</code>和<code>data.table::fread()</code>的速度，同时用<code>base</code>自带的<code>read.csv()</code>做benchmark。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/30/fread-vs-read-csv/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/30/shiny-first-try/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="夏小雨">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="夏小雨">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/30/shiny-first-try/" itemprop="url">
-                  Shiny初试：用wordcould2画用户标签
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-04-30 13:35:15" itemprop="dateCreated datePublished" datetime="2018-04-30T13:35:15+08:00">2018-04-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-30 14:45:56" itemprop="dateModified" datetime="2018-09-30T14:45:56+08:00">2018-09-30</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Shiny是Rstudio里用来做demo的，相当于一个前端框架，可以连接R里的元素。我是这么理解的。一直想试一试Shiny，这次做用户画像，正好可以用它做一个demo给开发同学看，所以就学习了一下它的使用逻辑。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/30/shiny-first-try/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
-  </nav>
-
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -2945,8 +1586,17 @@ body .markdown-body
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -3019,6 +1669,22 @@ body .markdown-body
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#_1"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#variable-importance"><span class="nav-number">2.</span> <span class="nav-text">Variable importance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#variable-contribution"><span class="nav-number">3.</span> <span class="nav-text">Variable contribution</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -3153,6 +1819,10 @@ body .markdown-body
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
 
   
 
