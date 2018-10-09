@@ -115,7 +115,8 @@
 <meta property="og:description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/images/ice_plots.png">
-<meta property="og:updated_time" content="2018-10-09T02:11:12.436Z">
+<meta property="og:image" content="http://yoursite.com/images/2_d_pdp.png">
+<meta property="og:updated_time" content="2018-10-09T02:41:19.493Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解释黑箱模型">
 <meta name="twitter:description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。">
@@ -368,7 +369,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-10-09 10:11:12" itemprop="dateModified" datetime="2018-10-09T10:11:12+08:00">2018-10-09</time>
+                <time title="Modified: 2018-10-09 10:41:19" itemprop="dateModified" datetime="2018-10-09T10:41:19+08:00">2018-10-09</time>
               
             
           </span>
@@ -458,9 +459,17 @@
 <p>其中，第Gain也是sklearn计算Random forest的variable importance的方法。从计算方法可知，这三种计算方式只针对tree-based models。三种方法对应了三种“importance”的定义，选取哪一种取决于使用者对“importance”的理解，因此三种方法计算的variable importance的rank在很多情况下也是不同的。用Gain计算importance的时候，它会倾向于选择靠近叶子的feature，而不是根部的。虽然根部的feature显然是更重要的（不然也不会优先split），但根部feature的training loss reduction不一定有叶子附近的feature来的多。<a href="https://towardsdatascience.com/interpretable-machine-learning-with-xgboost-9ec80d148d27" target="_blank" rel="noopener">这篇文章</a>里有具体的例子。</p>
 <p><strong>Permutation importance</strong></p>
 <p>除去上述三种方法外，还有一种适用于所有模型的计算variable importance的方法，即Permutation importance。它计算的是，如果我们保持其他变量不变，随机地shuffle target variable的值，对prediction的影响。如果一个变量的值随意shuffle，prediction的准确率没有太大变化，那我们就认为这个变量是不太重要的。反之，如果prediction的准确率大幅下降，那么这个变量应该是较为重要的。</p>
+<p>&nbsp;</p>
 <h1 id="Variable-contribution"><a href="#Variable-contribution" class="headerlink" title="Variable contribution"></a>Variable contribution</h1><p>这是一种只适用于tree-based models的度量方法，它计算的是每个变量如何形成了最后每个leaf的prediction的。每一次split的变量，对prediction的改变，就是这个变量的contribution。这个思路，总觉得哪里有些不对。具体细节可以参考<a href="http://savvastjortjoglou.com/intrepretable-machine-learning-nfl-combine.html#Feature-Contributions" target="_blank" rel="noopener">这篇文章</a>。</p>
+<p>&nbsp;</p>
 <h1 id="Partial-dependence-plots-amp-ICE-plots"><a href="#Partial-dependence-plots-amp-ICE-plots" class="headerlink" title="Partial dependence plots &amp; ICE plots"></a>Partial dependence plots &amp; ICE plots</h1><p><img src="/images/ice_plots.png" alt="ICE plots" title="ICE plots"></p>
-<p>ICE plots中每一条线代表一个observation，显然，如果有几百万observation时，我们只能通过随机抽样画出几百个observation的曲线。每一条线显示的是，对于该observation，保持其他变量不变的情况下，prediction如何随着某一个变量变化。图中的黑线代表的是average的水平，也就是partial dependence plot会画的。线条的颜色代表另一个变量的值，因此这个图也可以investigate两个变量的interaction。</p>
+<p>ICE plots中每一条线代表一个observation，显然，如果有几百万observations时，我们只能通过随机抽样画出几百个observation的曲线。每一条线显示的是，对于该observation，保持其他变量不变的情况下，prediction如何随着某一个变量变化。图中的黑线代表的是average的水平，也就是partial dependence plot会画的。线条的颜色代表另一个变量的值，因此这个图也可以investigate两个变量的interaction。</p>
+<p><img src="/images/2_d_pdp.png" alt="2-dimensional partial dependence plots" title="2-dimensional partial dependence plots"></p>
+<p>2-dimensional partial dependence plots可以显示两个变量的interaction。contour线上的值是prediction的值。在上图中，我们可以得出一些结论，如：</p>
+<p>Wt和Forty有巨大的interaction；</p>
+<p>Ht和Forty基本没有interaction，表现为基本平行的contour;</p>
+<p>BenchReps&gt;20的区间里BenchReps和Forty基本没有interaction，但在BenchReps&lt;20的区域两个变量有interaction。</p>
+<p>&nbsp;</p>
 <h1 id="LIME"><a href="#LIME" class="headerlink" title="LIME"></a>LIME</h1>
       
     </div>
