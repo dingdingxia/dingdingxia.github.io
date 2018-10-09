@@ -117,7 +117,8 @@
 <meta property="og:image" content="http://yoursite.com/images/ice_plots.png">
 <meta property="og:image" content="http://yoursite.com/images/2_d_pdp.png">
 <meta property="og:image" content="http://yoursite.com/images/lime.png">
-<meta property="og:updated_time" content="2018-10-09T05:25:22.511Z">
+<meta property="og:image" content="http://yoursite.com/images/lime_tabular_example.png">
+<meta property="og:updated_time" content="2018-10-09T06:03:43.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解释黑箱模型">
 <meta name="twitter:description" content="当我们做一个模型的时候，除了追求准确率之外，也希望模型是可解释的，例如这个人为什么是坏人。但是主流的准确率较高的机器学习算法都是黑箱模型，变量对模型和结果的影响不如回归之类的统计学模型那么显而易见。在本文中我整理了几种常用的，我觉得比较make sense，也比较容易理解的解释黑箱模型的方法。">
@@ -370,7 +371,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-10-09 13:25:22" itemprop="dateModified" datetime="2018-10-09T13:25:22+08:00">2018-10-09</time>
+                <time title="Modified: 2018-10-09 14:03:43" itemprop="dateModified" datetime="2018-10-09T14:03:43+08:00">2018-10-09</time>
               
             
           </span>
@@ -480,6 +481,10 @@
 <li>如果linear model中都是categorical variable，那么coefficients就是LIME给出的weights, 如果是continuous variable，那么weight应该等于coefficient乘以variable的取值</li>
 </ul>
 <p><img src="/images/lime.png" alt="LIME" title="The model&#39;s decision function is represented by the blue/pink background, and is clearly nonlinear. The bright red cross is the instance being explained (let&#39;s call it X). We sample instances around X, and weight them according to their proximity to X (weight here is indicated by size). We then learn a linear model (dashed line) that approximates the model well in the vicinity of X, but not necessarily globally"></p>
+<p>下图是LIME给的结果的一个例子。</p>
+<p><img src="/images/lime_tabular_example.png" alt="LIME result" title="Example of LIME results"></p>
+<p>这是一个二分类问题，目的是predict一样食物是edible还是poisonous的。这张图代表了一个observation，即一样食物，它的五个feature的值在图的最右这块。模型预测它是poisonous的概率是1，如图最左显示。哪些变量影响了这个prediction呢？影响最大的是odor=foul，它使得poisonous的概率增加了0.26，但是gill-size=broad使poisonous的概率减少了0.13，其余三个变量的解释同理。我们注意到，把这几个变量的值加起来并不等于1(0.26-0.13+0.11+0.08+0.06=0.38),这是由于有intercept存在的关系。另一值得注意的地方是，linear model不一定fit well，可以通过R-square之类model fitness的统计值来检查，如果linear model的fitness很低的话，它的结果也并不可信。</p>
+<h1 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h1><p>interaction<br>model诊断</p>
 
       
     </div>
@@ -667,7 +672,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable-importance"><span class="nav-number">2.</span> <span class="nav-text">Variable importance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable-contribution"><span class="nav-number">3.</span> <span class="nav-text">Variable contribution</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Partial-dependence-plots-amp-ICE-plots"><span class="nav-number">4.</span> <span class="nav-text">Partial dependence plots &amp; ICE plots</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LIME"><span class="nav-number">5.</span> <span class="nav-text">LIME</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概览"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable-importance"><span class="nav-number">2.</span> <span class="nav-text">Variable importance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable-contribution"><span class="nav-number">3.</span> <span class="nav-text">Variable contribution</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Partial-dependence-plots-amp-ICE-plots"><span class="nav-number">4.</span> <span class="nav-text">Partial dependence plots &amp; ICE plots</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LIME"><span class="nav-number">5.</span> <span class="nav-text">LIME</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#讨论"><span class="nav-number">6.</span> <span class="nav-text">讨论</span></a></li></ol></div>
             
 
           </div>
